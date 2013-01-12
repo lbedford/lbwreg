@@ -1,26 +1,27 @@
 <?php # -*- php -*-
 
 # When the event starts
-$year = 2012;
+$year = 2013;
 $month = 8;
-$day = 12;
+$day = 17;
 $duration = 8;
 
 $timeZone = 'Europe/Vienna';
 
 # Where the event is
-$location = "Diksmuide, Belgium";
+$location = "Castleton, Belgium";
 
 # Website deployment information
 $regpath = "http://lbwreg.draiocht.net";
-$eventhost = "http://lbw2012.tuxera.be";
-$teammail = "lbw2012@lbedford.org";
+$eventhost = "http://lbw2013.norgie.net";
+$teammail = "lbw2013@draiocht.net";
 $listmail = "lbw@x31.com";
 $frommail = "lbwreg@draiocht.net";
 
 # T-shirt information
-$Products = array("belgium");
+$Products = array();
 
+// level => price
 $Prices = array(0 => 20);
 
 $Sizes = array("M - Small",
@@ -48,7 +49,9 @@ $menu = array(
   array("changepassword.php", "Change Password", 2),
   array("logout.php",         "Logout",          2),
 );
+
 $pixupdate_string = "<span title='Place a picture file named mid_&lt;year&gt;_&lt;userid&gt;.jpg in reg/gallery/, then do update...'>Pix-update</span>";
+
 $admin_menu = array(
 //      pagename              caption            passlevel
   array("updategallery.php",  $pixupdate_string, 8),
@@ -90,3 +93,4 @@ $xport[4] = "Train";
 $xport[5] = "Bike";
 $xport[6] = "Other";
 $xport[7] = "Ship";
+$xport[8] = "Rocket";
