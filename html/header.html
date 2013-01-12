@@ -1,0 +1,27 @@
+<?php global $eventhost, $location, $date ?>
+	<tr>
+	  <td class="leftcolumn" valign="top" rowspan="2">
+	      <a href="welcome.php">
+	      <img
+		   src="images/hiking_tux-116x149.jpg"
+		   alt="Hiking Tux"
+		   border="0"
+		   width="77"
+		   height="99"
+	      />
+	      </a>
+	  </td>
+	  <td valign="top" class="centercolumn" >
+	      <a href="<?php echo $eventhost ?>">
+	          <h1>LBW <?php echo $year ?></h1>
+	      </a>
+	      <h1><?php echo $location?><br/>
+	      <?php echo $date[1] ?> - <?php echo $date[count($date) - 1] ?></h1>
+	  </td>
+	</tr>
+	<tr>
+	  <td valign="bottom" class="centercolumn" >
+	     <div style="visibility: hidden;" class="navbar" >
+	      </div>
+	  </td>
+	</tr>
