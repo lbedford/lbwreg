@@ -52,14 +52,14 @@
 
         printf("<tr><td>number of children</td><td><INPUT TYPE=TEXT name = children VALUE=\"%s\" SIZE=4 MAXLEN=4></td></tr>\n", $row["children"]);
         printf("<tr><td>Arrival</td><td><SELECT name = arrival>");
-        for ($i = 0; $i < count($date); $i++) {
+        for ($i = 0; $i < count($date) - 1; $i++) {
             $sel = ($row["arrival"] == $i)?"SELECTED":
             "";
             printf("<OPTION VALUE=%d %s>%s\n", $i, $sel, $date[$i]);
         }
         printf("</select></td></tr>\n");
         printf("<tr><td>Departure</td><td><SELECT name = departure>");
-        for ($i = 0; $i < count($date); $i++) {
+        for ($i = 0; $i < count($date) - 1; $i++) {
             $sel = ($row["departure"] == $i) ? "SELECTED" :
             "" ;
             printf("<OPTION VALUE=%d %s>%s\n", $i, $sel, $date[$i]);

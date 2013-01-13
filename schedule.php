@@ -29,7 +29,7 @@
     }
 
     $att = 0;
-    for($day = 1; $day < count($date); $day++) 
+    for($day = 1; $day < count($date) - 2; $day++) 
     {
         $forum_duration = array();
         $evid = array();

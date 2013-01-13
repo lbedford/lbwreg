@@ -234,13 +234,13 @@
           <td>
             <select name="arrival">
               <?php
-                for($i = 0; $i < count($date); $i++) {
+                for($i = 0; $i < count($date) - 1; $i++) {
                   printf("\t  <option value='$i'>%s</option>\n", $date[$i]);
                 }
                 echo "\t  </select></td></tr>";
 
                 echo "\t  <tr><td>Departure date:</td><td> <SELECT name=\"departure\">\n";
-                for($i = 0; $i < count($date); $i++) {
+                for($i = 0; $i < count($date) - 1; $i++) {
                   printf("\t  <option value='$i'>%s</option>\n", $date[$i]);
                 }
                 echo "\t  </select></td></tr>\n";

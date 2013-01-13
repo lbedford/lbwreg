@@ -95,7 +95,7 @@
 			    $bgc=" class='unscheduled'";
                         elseif (! $myrow["schedtxt"])
                             $bgc1=" class='unscheduled'";
-			for($evday = 0; $evday < count($date); $evday++) {
+			for($evday = 0; $evday < count($date) - 2; $evday++) {
 			    if ($myrow["day"] == $evday)
 				$sel = " selected";
 			    else

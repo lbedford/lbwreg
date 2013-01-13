@@ -8,11 +8,13 @@
 
     date_default_timezone_set($timeZone);
 
+    $date[NULL] = "undecided";
+
     # The days of the event
+    $start_time = strtotime("-1 day", strtotime("$year-$month-$day"));
     for ($i = 0; $i <= $duration + 1; $i++)
     {
-      $day_of_event = $i - 1;
-      $timestamp = strtotime("+ $day_of_event day", strtotime("$year-$month-$day"));
+      $timestamp = strtotime("+ $i day", $start_time);
       $timestamps[$i] = $timestamp;
       $date[$i] = date("j F", $timestamp);
       $shortday[$i] = date("D", $timestamp);
