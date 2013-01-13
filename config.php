@@ -4,12 +4,12 @@
 $year = 2013;
 $month = 8;
 $day = 17;
-$duration = 8;
+$duration = 9;
 
 $timeZone = 'Europe/Vienna';
 
 # Where the event is
-$location = "Castleton, Belgium";
+$location = "Castleton (Honeypot Village), Derbyshire";
 
 # Website deployment information
 $regpath = "http://lbwreg.draiocht.net";
