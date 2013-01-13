@@ -9,8 +9,7 @@
     date_default_timezone_set($timeZone);
 
     # The days of the event
-    $date[0] = "undecided";
-    for ($i = 1; $i <= $duration; $i++)
+    for ($i = 0; $i <= $duration + 1; $i++)
     {
       $day_of_event = $i - 1;
       $timestamp = strtotime("+ $day_of_event day", strtotime("$year-$month-$day"));

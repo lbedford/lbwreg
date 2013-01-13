@@ -64,13 +64,10 @@
     else
     {
       printf("<b>Time since the LBW started: %d days %d hours %d mins<br /></b>", $days, $hours, $mins);
-      $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids ".
+      $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries ".
   			  "FROM people2 where (attending>0) AND (status>1) " .
   			  "AND (present = 1)", $db);
       $row = mysql_fetch_array($result);
-      $uni = mysql_num_rows(mysql_query("SELECT country from people2 where (attending>0) ".
-  				      "AND (status>=1) " .
-  				      "AND (present = 1) group by country", $db));
 
       $article = "are";
       if ($row["regs"] == 1)
@@ -79,18 +76,15 @@
       }
        
       printf("<b>There $article %d adults and %d children present, from %d countries.<br /></b>\n",
-          $row["ads"], $row["kids"], $uni);
+          $row["ads"], $row["kids"], $row["countries"]);
     }
      
     // Quick statistics
     echo "<br />";
-    $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids ".
+    $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries ".
 			  "FROM people2 where (attending>0) AND (status>1) " .
 			  "AND arrival != 0 AND departure != 0", $db);
     $row = mysql_fetch_array($result);
-    $uni = mysql_num_rows(mysql_query("SELECT country from people2 where (attending>0) ".
-				      "AND (status>=1) AND arrival !=0 " .
-				      "AND departure != 0 group by country", $db));
      
     $article = "are";
     $extension = "s";
@@ -100,15 +94,12 @@
       $extension = "";
     }
     printf("There $article %d registration$extension, totalling %d adults and %d children from %d countries, who really know where their towels are.<br>\n",
-        $row["regs"], $row["ads"], $row["kids"], $uni);
+        $row["regs"], $row["ads"], $row["kids"], $row["countries"]);
 
-    $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids ".
+    $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries ".
 			  "FROM people2 where (attending>0) AND (status>1) ".
-			  "AND (arrival = 0 OR departure = 0)", $db);
+			  "AND (arrival IS NULL OR departure IS NULL)", $db);
     $row = mysql_fetch_array($result);
-    $uni = mysql_num_rows(mysql_query("SELECT country from people2 where (attending>0) ".
-				      "AND (status>=1) AND ".
-				      "(arrival = 0 OR departure = 0) group by country", $db));
     if ($row["regs"] > 0)
     {
       $article = "are";
@@ -119,7 +110,7 @@
         $extension = "";
       }
       printf("There $article %d indecisive registration$extension, totalling %d adults and %d children from %d countries,".
-             " who don't know when they're coming or going<br>\n", $row["regs"], $row["ads"], $row["kids"], $uni);
+             " who don't know when they're coming or going<br>\n", $row["regs"], $row["ads"], $row["kids"], $row["countries"]);
     }
     echo "<hr /><br />";
      
