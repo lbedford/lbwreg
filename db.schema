@@ -1,0 +1,242 @@
+-- MySQL dump 10.13  Distrib 5.1.66, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: lbw2008
+-- ------------------------------------------------------
+-- Server version	5.1.66-0+squeeze1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `Events`
+--
+
+DROP TABLE IF EXISTS `Events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` int(11) DEFAULT NULL,
+  `owner` int(11) DEFAULT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `schedtxt` varchar(100) DEFAULT NULL,
+  `description` text,
+  `language` tinyint(4) DEFAULT NULL,
+  `number` tinyint(4) DEFAULT NULL,
+  `forum_duration` tinyint(4) DEFAULT NULL,
+  `day` tinyint(4) NOT NULL DEFAULT '0',
+  `hour` tinyint(4) NOT NULL DEFAULT '0',
+  `tslot` tinyint(4) NOT NULL DEFAULT '0',
+  `slot` int(11) NOT NULL DEFAULT '0',
+  `created` int(11) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '256',
+  `firstmessage` int(11) DEFAULT '0',
+  `lastmessage` int(11) DEFAULT '0',
+  `messages` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `country`
+--
+
+DROP TABLE IF EXISTS `country`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `country` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` char(100) NOT NULL DEFAULT '',
+  `code` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_2` (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `discussions`
+--
+
+DROP TABLE IF EXISTS `discussions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `discussions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `forum` int(11) DEFAULT NULL,
+  `writer` int(11) DEFAULT NULL,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `subject` varchar(40) DEFAULT NULL,
+  `message` text,
+  `next` int(11) DEFAULT NULL,
+  `previous` int(11) DEFAULT NULL,
+  `posted` varchar(19) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `equipment`
+--
+
+DROP TABLE IF EXISTS `equipment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `equipment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `owner` int(11) DEFAULT NULL,
+  `avail` varchar(16) NOT NULL DEFAULT 'Share',
+  `number` int(11) NOT NULL DEFAULT '0',
+  `class` varchar(24) DEFAULT NULL,
+  `type` varchar(24) DEFAULT NULL,
+  `attr1` varchar(24) NOT NULL DEFAULT '',
+  `attr2` varchar(24) NOT NULL DEFAULT '',
+  `attr3` varchar(24) NOT NULL DEFAULT '',
+  `attr4` int(11) DEFAULT NULL,
+  `volts` int(11) NOT NULL DEFAULT '220',
+  `amps` int(11) DEFAULT NULL,
+  `comments` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `eventreg`
+--
+
+DROP TABLE IF EXISTS `eventreg`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `eventreg` (
+  `geek` int(11) NOT NULL DEFAULT '0',
+  `event` int(11) NOT NULL DEFAULT '0',
+  `subscribed` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`geek`,`event`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `maillist`
+--
+
+DROP TABLE IF EXISTS `maillist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `maillist` (
+  `mid` int(11) NOT NULL AUTO_INCREMENT,
+  `listadrs` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`mid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `people2`
+--
+
+DROP TABLE IF EXISTS `people2`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `people2` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `logon` varchar(32) NOT NULL DEFAULT '',
+  `firstname` varchar(100) DEFAULT NULL,
+  `surname` varchar(100) NOT NULL DEFAULT '',
+  `password` varchar(40) DEFAULT NULL,
+  `email` varchar(100) NOT NULL DEFAULT '',
+  `city` varchar(100) DEFAULT NULL,
+  `country` tinyint(4) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '4',
+  `children` tinyint(4) NOT NULL DEFAULT '0',
+  `arrival` tinyint(4) DEFAULT NULL,
+  `departure` tinyint(4) DEFAULT NULL,
+  `travelby` tinyint(4) NOT NULL DEFAULT '0',
+  `kindofaccomodation` tinyint(4) NOT NULL DEFAULT '0',
+  `nameofaccomodation` varchar(50) DEFAULT NULL,
+  `whois` tinyint(4) NOT NULL DEFAULT '0',
+  `logons` int(11) NOT NULL DEFAULT '0',
+  `laston` int(11) NOT NULL DEFAULT '0',
+  `present` tinyint(1) NOT NULL DEFAULT '0',
+  `attending` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `id_2` (`id`),
+  UNIQUE KEY `logon` (`logon`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rides`
+--
+
+DROP TABLE IF EXISTS `rides`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rides` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) DEFAULT NULL,
+  `orig` varchar(32) NOT NULL DEFAULT '',
+  `dest` varchar(32) NOT NULL DEFAULT '',
+  `date` varchar(16) NOT NULL DEFAULT '',
+  `person` int(11) NOT NULL DEFAULT '0',
+  `email` varchar(64) NOT NULL DEFAULT '',
+  `space` varchar(24) NOT NULL DEFAULT '',
+  `notes` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_2` (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tshirts`
+--
+
+DROP TABLE IF EXISTS `tshirts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tshirts` (
+  `ref` int(11) NOT NULL AUTO_INCREMENT,
+  `person` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(64) DEFAULT NULL,
+  `quantity` int(11) NOT NULL DEFAULT '0',
+  `product` int(11) NOT NULL DEFAULT '1',
+  `size` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ref`),
+  UNIQUE KEY `ref` (`ref`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `whois`
+--
+
+DROP TABLE IF EXISTS `whois`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `whois` (
+  `lbwid` int(11) NOT NULL DEFAULT '0',
+  `bigpix` varchar(64) DEFAULT NULL,
+  `galpix` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`lbwid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-01-14 23:26:47
