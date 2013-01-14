@@ -4,12 +4,14 @@
     function sendEmailToList($event) {
         global $listmail, $frommail, $year;
 
-        $ownermail = getForumOwnerEmail($event);
+        $ownername = getForumOwnerName($event);
         $event_name = getNameOfEvent($event);
         $event_description = getDescriptionOfEvent($event);
         mail($listmail, "New event proposed for LBW $year",
             "New event:\n\n".
             "  Name: $event_name\n".
+            "\n".
+            "  El Proposador/in: $ownername\n".
             "\n".
             "  Description: $event_description".
             "\n".

@@ -168,6 +168,18 @@
       return $myrow["email"];
     }
 
+    function getForumOwnerName($forum) {
+      global $db;
+      $query = "select people2.firstname, people2.surname from people2, Events where ".
+               "Events.id = $forum and people2.id = Events.owner";
+      $resp = mysql_query($query, $db);
+      if (!$resp) {
+          printf("<br />$query: %s<br />",mysql_error($db));
+      }
+      $myrow = mysql_fetch_array($resp);
+      return $myrow["firstname"]." ".$myrow["surname"];
+    }
+
     function getNameOfEvent($event) {
       global $db;
       $query = "select name from Events where id = $event";
