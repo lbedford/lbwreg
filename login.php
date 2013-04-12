@@ -10,6 +10,9 @@
      
     HtmlHead("login", "Login", "", "");
     include("html/loginform.html");
+?>
+    <iframe frameborder="no" width="600px" height="200px" src="http://lbwreg.draiocht.net/analytics/index.php?module=CoreAdminHome&action=optOut&language=en"></iframe>
+<?php
     HtmlTail();
 ?>
 
