@@ -33,11 +33,11 @@
          
         printf("\n<FORM METHOD=POST><INPUT TYPE=HIDDEN NAME=LBWID VALUE=$user>\n");
         printf("<table class='reginfo' CELLPADDING=2>\n");
-        printf("<tr><td>Login     </td><td><INPUT TYPE=TEXT name=logon VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", $row["logon"]);
-        printf("<tr><td>First Name</td><td> <INPUT TYPE=TEXT name=firstname VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", $row["firstname"]);
-        printf("<tr><td>Surname</td><td><INPUT TYPE=TEXT name=surname VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", $row["surname"]);
-        printf("<tr><td>Email</td><td><INPUT TYPE=TEXT name=email VALUE= \"%s\" SIZE=35 MAXLEN=60></td></tr>\n", $row["email"]);
-        printf("<tr><td>City</td><td><INPUT TYPE=TEXT name=city VALUE=\"%s\" SIZE=35 MAXLEN=40></td></tr>\n", $row["city"]);
+        printf("<tr><td>Login     </td><td><INPUT TYPE=TEXT name=logon VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["logon"]));
+        printf("<tr><td>First Name</td><td> <INPUT TYPE=TEXT name=firstname VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["firstname"]));
+        printf("<tr><td>Surname</td><td><INPUT TYPE=TEXT name=surname VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["surname"]));
+        printf("<tr><td>Email</td><td><INPUT TYPE=TEXT name=email VALUE= \"%s\" SIZE=35 MAXLEN=60></td></tr>\n", htmlspecialchars($row["email"]));
+        printf("<tr><td>City</td><td><INPUT TYPE=TEXT name=city VALUE=\"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["city"]));
         printf("<tr><td>Country</td><td><SELECT name=country>");
         $sql = "SELECT * FROM country order by name";
         $rx = mysql_query($sql, $db);
@@ -81,7 +81,7 @@
         }
         printf("</select></td></tr>\n");
          
-        printf("<tr><td>Name of Accomodation<br>if known</td><td><INPUT TYPE=TEXT name = nameofaccomodation VALUE=\"%s\" SIZE=35 MAXLEN=40></td></tr>\n", $row["nameofaccomodation"]);
+        printf("<tr><td>Name of Accomodation<br>if known</td><td><INPUT TYPE=TEXT name = nameofaccomodation VALUE=\"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["nameofaccomodation"]));
 
         printf("<tr><td>Attending?</td><td><INPUT TYPE=CHECKBOX name=attending VALUE=\"1\" %s></td></tr>\n", $row["attending"] == 1 ? "checked=checked" : "" );
          
@@ -165,18 +165,12 @@
             }
             if (mysql_num_rows($result) > 0) {
                 $err++;
-                echo "Login \"".$logon."\" is already in use<br>\n";
+                echo "Login \"".htmlspecialchars($logon)."\" is already in use<br>\n";
             }
         }
         if ($err == 0) {
             $sql = "UPDATE people2 SET logon = '$logon',email = '$email', city='$city', country=$country, attending=$attending, children='$children', arrival=$arrival, departure=$departure, travelby='$travelby', kindofaccomodation='".$accorder[$kindofaccomodation]."', nameofaccomodation='$nameofaccomodation', firstname='$firstname', surname='$surname'  WHERE id='$LBWID'";
             $result = mysql_query($sql, $db);
-            if ($LBWID == 32) {
-              $myfile = "/tmp/log.txt";
-              $fh = fopen($myfile, 'w+');
-              fwrite($fh,$sql);
-              fclose($fh);
-            }
             if (!$result) {
 		HtmlHead("useredit", "Database Error", $userstatus, $userid);
                 printf("%s", mysql_error());

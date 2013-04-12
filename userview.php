@@ -50,14 +50,14 @@
     echo "<tr><td>Travelling by</td><td>".$xport[$travelby]."</td></tr>\n";
     if ($userstatus > 8 ) {
 	echo "<tr><td>Status</td><td>$status</td></tr>\n";
-	echo "<tr><td>Login</td><td>$logon</td></tr>\n";
+	echo "<tr><td>Login</td><td>".htmlspecialchars($logon)."</td></tr>\n";
     }
     if (($userstatus > 2) || ($user == $userid)) {
-        echo "<tr><td>E-Mail</td><td><A href=mailto:$email>$email</a></td></tr>";
+        echo "<tr><td>E-Mail</td><td><A href=mailto:".htmlspecialchars($email).">".htmlspecialchars($email)."</a></td></tr>";
     }
     $accomodationtype = $acctype[$kindofaccomodation];
     $accomodationname = (strlen($nameofaccomodation) > 2) ? $nameofaccomodation: "?";
-    printf("<tr><td colspan='3'> Accomodation Type:&nbsp;%s&nbsp;&nbsp;Name:&nbsp;%s</td></tr>\n", $accomodationtype, $accomodationname);
+    printf("<tr><td colspan='3'> Accomodation Type:&nbsp;%s&nbsp;&nbsp;Name:&nbsp;%s</td></tr>\n", htmlspecialchars($accomodationtype), htmlspecialchars($accomodationname));
     echo "</table>";
     echo "<br>\n";
 

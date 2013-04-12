@@ -42,7 +42,7 @@
         echo "      <tr>\n";
         echo "        <td class='leftcolumn strut' valign='top'>\n";
         echo "          <br />\n";
-        echo "          $title";
+        echo "          ".htmlspecialchars($title);
         echo "        </td>\n";
         echo "        <td valign='top' class='centercolumn'><center>\n";
 
