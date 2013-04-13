@@ -75,8 +75,7 @@
         printf("</select></td></tr>\n");
         printf("<tr><td>Kind of Accommodation</td><td><SELECT name = kindofaccomodation>\n");
         for ($i = 0; $i < count($acctype); $i++) {
-            $sel = ($accorder[$i] == $row["kindofaccomodation"])? "SELECTED":
-            "";
+            $sel = ($accorder[$i] == $row["kindofaccomodation"]) ? "SELECTED": "";
             printf("<OPTION VALUE = %s %s>%s\n", $i, $sel, $acctype[$accorder[$i]]);
         }
         printf("</select></td></tr>\n");

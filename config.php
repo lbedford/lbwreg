@@ -78,11 +78,12 @@ $acctype[8] = "Other";
 $accorder[0] = 0;
 $accorder[1] = 1;
 $accorder[2] = 2;
-$accorder[3] = 7;
-$accorder[4] = 3;
-$accorder[5] = 4;
-$accorder[6] = 5;
-$accorder[7] = 6;
+$accorder[3] = 3;
+$accorder[4] = 4;
+$accorder[5] = 5;
+$accorder[6] = 6;
+$accorder[7] = 7;
+$accorder[8] = 8;
 
 # The types of transport
 $xport[0] = "unknown";
