@@ -21,7 +21,6 @@
       $weekday[$i] = date("l", $timestamp);
     }
 
-     
     # ----------------------------------------------------------------------
      
     function HtmlHead($page, $title, $status, $userid, $javascript = '') {

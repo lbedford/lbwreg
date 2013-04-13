@@ -53,17 +53,22 @@
         printf("<tr><td>number of children</td><td><INPUT TYPE=TEXT name = children VALUE=\"%s\" SIZE=4 MAXLEN=4></td></tr>\n", $row["children"]);
         printf("<tr><td>Arrival</td><td><SELECT name = arrival>");
         for ($i = 0; $i < count($date) - 1; $i++) {
-            $sel = ($row["arrival"] == $i)?"SELECTED":
-            "";
+            $sel = ($row["arrival"] == $i && !is_null($row["arrival"])) ?
+                "SELECTED": "";
             printf("<OPTION VALUE=%d %s>%s\n", $i, $sel, $date[$i]);
         }
+        printf("<OPTION VALUE=NULL %s>Unknown\n", is_null($row["arrival"]) ?
+            "SELECTED" : "");
         printf("</select></td></tr>\n");
+
         printf("<tr><td>Departure</td><td><SELECT name = departure>");
         for ($i = 0; $i < count($date) - 1; $i++) {
-            $sel = ($row["departure"] == $i) ? "SELECTED" :
-            "" ;
+            $sel = ($row["departure"] == $i && !is_null($row["departure"])) ? 
+                "SELECTED" : "" ;
             printf("<OPTION VALUE=%d %s>%s\n", $i, $sel, $date[$i]);
         }
+        printf("<OPTION VALUE=NULL %s>Unknown\n", is_null($row["departure"]) ?
+            "SELECTED" : "");
         printf("</select></td></tr>\n");
          
         printf("<tr><td>Travelling by</td><td><SELECT name = travelby>");
@@ -145,7 +150,7 @@
             HtmlTail();
         }
         $err = 0;
-        if (($departure < $arrival) && ($departure != 1)) {
+        if (($departure < $arrival) && ($departure != "NULL") && ($arrival != "NULL")) {
             $err++;
             $error[$err] = "You can not leave before you arrive";
         }

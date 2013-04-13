@@ -83,7 +83,7 @@
     echo "<br />";
     $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries ".
 			  "FROM people2 where (attending>0) AND (status>1) " .
-			  "AND arrival != 0 AND departure != 0", $db);
+			  "AND arrival IS NOT NULL AND departure IS NOT NULL", $db);
     $row = mysql_fetch_array($result);
      
     $article = "are";
