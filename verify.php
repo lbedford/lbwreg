@@ -46,7 +46,10 @@
 
     $row = mysql_fetch_array($result);
 
-    if (crypt($password,$row["password"]) == $row["password"])
+    $stored_password = $row["password"];
+    $crypted_password = crypt($password, $stored_password);
+
+    if (crypt($password,$stored_password) == $stored_password)
     {
         if ($row["status"] < 2) {
 	    HtmlHead("verify", "No access", $_SESSION["userstatus"], $_SESSION["userid"]);

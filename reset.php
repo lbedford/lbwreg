@@ -19,7 +19,7 @@
     }
      
     $db = ConnectMysql();
-    HtmlHead("reset", "", $_SESSION["userstatus"], $_SESSION["userid"]);
+    HtmlHead("reset", "", 1, 0);
     
     /* first get firstname/surname from the environment POST/GET */
     $firstname = $_REQUEST["firstname"];

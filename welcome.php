@@ -121,17 +121,17 @@
         echo "We don't know if you're joining us this year.<br>";
         echo "If you can come please <a href='useredit.php'>update your user record</a>. set \"attending\" or more and enter your dates<br>";
     } else {
-        if (($user_row["arrival"] > 0) && ($user_row["departure"] > 0 ) && ($user_row["attending"] > 0)) {
+        if (!is_null($user_row["arrival"]) && !is_null($user_row["departure"]) && ($user_row["attending"] > 0)) {
             printf("<b>You are expected here from %s until %s.<br />\n", $date[$user_row["arrival"]], $date[ $user_row["departure"]]);
             echo ("If this is incorrect please <a href='useredit.php'>update your registry  entry</a>.<br />\n");
         } else {
             $v = "Your ";
             $c = 0;
-            if ($user_row["arrival"] == 0) {
+            if (is_null($user_row["arrival"])) {
                 $v .= "arrival ";
                 $c++;
             }
-            if ($user_row["departure"] == 0) {
+            if (is_null($user_row["departure"])) {
                 if ($c == 1)
                     $v .= "and ";
                 $v .= "departure ";
