@@ -125,7 +125,7 @@
 		    			$s = ($i == 3) ? "selected" : "";
 		    			echo "<option value='$i' $s> $i" ;
 				}
-				printf("</select> hours duration<br>\n");
+				printf("</select> hours long<br>\n");
 				break;
 	    		case 4:
 				echo "<INPUT TYPE=HIDDEN NAME=number VALUE=1>\n";
@@ -134,7 +134,7 @@
 		    			$s = ($i == 3) ? "selected" : "";
 		    			echo "<option value='$i' $s> $i" ;
 				}
-				printf("</select> hours duration<br>\n");
+				printf("</select> hours long<br>\n");
 				break;
 		}
         	echo "<INPUT TYPE=SUBMIT NAME=option VALUE=Save>&nbsp;<INPUT TYPE=SUBMIT NAME=option VALUE=ABORT>\n";

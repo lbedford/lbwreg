@@ -73,7 +73,7 @@
 			$s = ($i == $myrow["forum_duration"]) ? "selected" : "";
 			echo "<option value='$i' $s> $i\n";
 		    }
-		    printf("</select> hours forum_duration<br>\n");
+		    printf("</select> hours long<br>\n");
 		    break;
 	    }
 
