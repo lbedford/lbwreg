@@ -146,7 +146,7 @@
         echo "<tr ><TH colspan=$ProductCount>Your current order</th></tr>";
         echo "<tr ><TD Colspan=$ProductCount><b>";
         echo "<table class='reginfo' width=100% >";
-        echo "<tr><TH width=10%>Number</th><TH width=10%>Colour</th><TH width=20%>Size</th><TH width=20%>Total Price per Order</TH><TH width=30%>&nbsp;</th></tr>";
+        echo "<tr><TH width=10%>Number</th><TH width=10%>Style</th><TH width=20%>Size</th><TH width=20%>Total Price per Order</TH><TH width=30%>&nbsp;</th></tr>";
         while ($row = mysql_fetch_array($result)) {
             extract($row);
             if ($pagestat)
@@ -165,10 +165,10 @@
         foreach($Sizes as $i => $size)
           printf ("<option value='$i' %s> $size </option>\n", ($i == 7)?"selected":"");
         echo "</select>";
-        echo "<b> Colour <SELECT name=product></b>";
-        foreach ($Products as $i => $colour) {
-          if ($colour) 
-            printf("<option value=$i %s>$colour</option>\n", ($i == 0)?"selected":"");
+        echo "<b> Style <SELECT name=product></b>";
+        foreach ($Products as $i => $style) {
+          if ($style) 
+            printf("<option value=$i %s>$style</option>\n", ($i == 0)?"selected":"");
         }
         echo "</select>";
         echo " <INPUT TYPE=SUBMIT NAME=option value=Order> ";

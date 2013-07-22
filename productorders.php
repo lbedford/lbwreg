@@ -28,8 +28,8 @@
      
   $cols=count($Sizes)+2;
   echo "<table class='reginfo'  >";
-  echo "<tr><th colspan='$cols'>Aggregated T-shirts Orders by colour & size for ".$punters." buyers<br></th></tr>\n";
-  echo "<tr><TH width=60>Colour</th>";
+  echo "<tr><th colspan='$cols'>Aggregated T-shirts Orders by style & size for ".$punters." buyers<br></th></tr>\n";
+  echo "<tr><TH width=60>Style</th>";
   foreach($Sizes as $i => $size) {
     echo "<TH width=60>$size</th>";
     $quantity_size[$i] = 0;
@@ -67,7 +67,7 @@
     $result = mysql_query("SELECT ref, name, quantity, product, size FROM tshirts ORDER by ref", $db);
     echo "<table class='reginfo'  >";
     echo "<tr><TH  COLSPAN=5>Listing of All Orders by  person</th></tr>\n";
-    echo "<tr ><th>Ref.</th><th>Person</th><th>Number</th><th>Colour</th><th>Size</th></tr>";
+    echo "<tr ><th>Ref.</th><th>Person</th><th>Number</th><th>Style</th><th>Size</th></tr>";
     while ($row = mysql_fetch_array($result)) {
         extract($row);
         printf("<tr><td>%d</td><td>%s</td><td>%d </td><td> %s</td><td>%s </td></tr>",
