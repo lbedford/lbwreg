@@ -19,10 +19,10 @@ $listmail = "lbw@x31.com";
 $frommail = "lbwreg@draiocht.net";
 
 # T-shirt information
-$Products = array();
+$Products = array("provisional");
 
 // level => price
-$Prices = array(0 => 20);
+$Prices = array(0 => 15);
 
 $Sizes = array("M - Small",
                "M - Medium",

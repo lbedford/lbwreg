@@ -83,7 +83,7 @@
     $now = time();
     # mktime(hour, minute, second, month, day, year, isDst)
     $open  = mktime(00, 00, 00, 6, 10, 2011, 1);
-    $close = mktime(00, 00, 00, 8, 6, 2012, 1);
+    $close = mktime(00, 00, 00, 8, 6, 2013, 1);
     if ($now < $open) {
         echo "<h2>Orders not open yet! Sorry!</h2>";
     } else if ( $open <= $now && $now < $close) {
