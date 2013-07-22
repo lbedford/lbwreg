@@ -24,18 +24,18 @@ $Products = array("provisional");
 // level => price
 $Prices = array(0 => 15);
 
-$Sizes = array("M - Small",
-               "M - Medium",
-               "M - Large",
-               "M - XL",
-               "M - 2XL",
-               "M - 3XL",
-               "M - 4XL",
-               "M - 5XL",
-               "W - Small",
-               "W - Medium",
-               "W - Large",
-               "W - XL");
+$Sizes = array("Men's - Small",
+               "Men's - Medium",
+               "Men's - Large",
+               "Men's - XL",
+               "Men's - 2XL",
+               "Men's - 3XL",
+               "Men's - 4XL",
+               "Men's - 5XL",
+               "Women's - Small",
+               "Women's - Medium",
+               "Women's - Large",
+               "Women's - XL");
 
 $menu = array(
 //      pagename              caption            passlevel
