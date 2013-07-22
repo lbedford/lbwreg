@@ -22,7 +22,7 @@ $frommail = "lbwreg@draiocht.net";
 $Products = array("provisional");
 
 // level => price
-$Prices = array(0 => 15);
+$Prices = array(0 => '15 - current guess');
 
 $Sizes = array("Men's - Small",
                "Men's - Medium",

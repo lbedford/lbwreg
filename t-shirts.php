@@ -116,7 +116,7 @@
     $Price = getTshirtPrice($Prices, $row[0]);
 
     echo "<tr ><th colspan='$colspan'>Business Proposal: Quality LBW T-shirts!!!11!!11</th></tr>";
-    echo "<tr ><th colspan='$colspan'><center>T-shirt price: &euro;$Price<br>";
+    echo "<tr ><th colspan='$colspan'><center>T-shirt price: &pound;$Price<br>";
     #echo "The underpants fund will be raided to subsidise the orders as necessary.";
     #echo "<table>\n<tr><th>Threshold</th><th>Price for all orders</th></tr>\n";
     #foreach($Prices as $threshold => $CurrentPrice) {
