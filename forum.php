@@ -36,6 +36,8 @@
         header("Location: welcome.php"); // if forum = 1 then send user to welcome page
     }
      
+    $forum = mysql_real_escape_string(trim($forum));
+
     if (isset($submit)) {
         // check for register / de-register
         if ($submit == "REGISTER") {
@@ -119,7 +121,15 @@
             echo "<tr ><TD COLSPAN=3 align=center>You will be able to register to attend this event when your access has been approved by the organisers<br>We Regret the inconvenience caused by Script Kiddies<br></td></tr>";
     }
      
-     
+    $result = mysql_query("SELECT day from Events where id=$forum");
+    if (!$result) {
+      error_log("$query failed");
+      $day = null;
+    } else {
+      $row = mysql_fetch_row($result);
+      $day = $row[0];
+      echo "<TR><TH COLSPAN=3>This event is currently scheduled for ".$date[$day]."</TH></TR>";
+    }
      
     $result = mysql_query("SELECT geek,event,firstname,surname FROM eventreg,people2  where (people2.id=geek) AND (event=$forum) AND (geek != $owner)", $db);
     $count = mysql_num_rows($result);
@@ -130,8 +140,31 @@
         while ($reg = mysql_fetch_array($result)) {
             if (($col %3) == 0)
                 echo "<tr>";
-            printf("<td><A href=userview.php?user=%d>%s %s</a>, </td>", $reg["geek"], $reg["firstname"], $reg["surname"]);
             $col++;
+            echo "<td>";
+            $attend = 0;
+            $span_class = "";
+            if ($day > 0) {
+                $query = "SELECT count(people2.id) from people2 where people2.arrival < $day ".
+                    "AND people2.departure > $day and people2.id=".$reg["geek"];
+                $attend_result = mysql_query($query, $db);
+                if (!$attend_result) {
+                    error_log("$query failed");
+                } else {
+                    $row = mysql_fetch_array($attend_result);
+                    $attend = $row[0];
+                }
+                if ($attend < 1) {
+                    $span_class = "class='missing_attendees'";
+	        }
+            }
+            echo "<span $span_class>";
+            printf("<A href=userview.php?user=%d>%s %s</a>", $reg["geek"], $reg["firstname"], $reg["surname"]);
+            echo "</span>";
+            if (($col % 3) != 0) {
+              echo ",";
+            }
+            echo "</td>";
             if (($col % 3) == 0)
                 echo "</tr>\n";
         }

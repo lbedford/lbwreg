@@ -59,4 +59,6 @@
 		  background-color: #EE6 !important;
 	        }
 
-
+  .missing_attendees {
+                  background-color: #FF0000;
+                     }

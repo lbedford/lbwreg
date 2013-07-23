@@ -1,13 +1,47 @@
 <?php
     include("basefunc.inc.php");
 
+    function CalculatePotentialAttendees($db, $event_id) {
+        $query = "SELECT COUNT(people2.id) from people2, Events, eventreg ".
+            "where people2.id = eventreg.geek and Events.id = eventreg.event ".
+            "and Events.day < people2.departure and Events.day > people2.arrival ".
+            "and eventreg.event=$event_id";
+        $result = mysql_query($query, $db);
+        if (!$result) {
+            error_log("Query failed: $query");
+            return 0;
+        }
+        return mysql_fetch_row($result)[0];
+    }
+
+    function CalculateRegistered($db, $event_id) {
+        $query = "SELECT COUNT(geek) FROM eventreg WHERE event=$event_id";
+        $result = mysql_query($query, $db);
+        if (!$result) {
+            error_log("Query failed: $query");
+            return 0;
+        }
+        return mysql_fetch_row($result)[0];
+    }
+
+    function CalculateConflicts($db, $event_one, $event_two) {
+        $query = "SELECT COUNT(e1.geek) FROM eventreg as e1, eventreg as e2 ".
+                 "WHERE e1.geek=e2.geek AND e1.event=$event_one and ".
+                 "e2.event=$event_two";
+        $result = mysql_query($query, $db);
+        if (!$result) {
+            error_log("Query failed: $query");
+            return 0;
+        }
+      return mysql_fetch_row($result)[0];
+    }
+
     /* variables from the environment (GET/POST) */
     /* (none found) */
 
     $_SESSION["userid"] = 0;
     session_start();
-    if (! $_SESSION["userid"] ) 
-    {
+    if (!array_key_exists("userid", $_SESSION)) {
         header("Location: login.php"); exit();
     }
      
@@ -150,58 +184,63 @@
                 if(($sched[$evnum] != 0) && ($sched[$evnum] < 25))  {
                     $e1 = $sched[10] ? $evid[$sched[10]]:0;
                     $e2 = $sched[12] ? $evid[$sched[12]]:0;
-                    $result = mysql_query("SELECT * FROM eventreg as e1, eventreg as e2 WHERE e1.geek=e2.geek AND e1.event=".$evid[$sched[$evnum]]." AND (e2.event=$e1 OR e2.event=$e2)", $db);
-                    $num1 = mysql_num_rows($result);
-                    $result = mysql_query("SELECT * FROM eventreg WHERE event=".$evid[$sched[$evnum]], $db);
-                    $num2 = mysql_num_rows($result);
-                    $name[$sched[$evnum]] .= " ($num1/$num2)";
+                    $conflicted = CalculateConflicts($db, $e1, $e2);
+                    $total_attendees = CalculateRegistered($db, $evid[$sched[$evnum]]);
+                    $name[$sched[$evnum]] .= " ($conflicted/$total_attendees)";
+                    $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[$evnum]]);
+                    if ($potential_attendees < $total_attendees) {
+                        $name[$sched[$evnum]] = "<span class='missing_attendees'>".$name[$sched[$evnum]]."</span>";
+                    }
                 }
             }
             for ($evnum=5; $evnum<10; $evnum++) {
                 if(($sched[$evnum] != 0) && ($sched[$evnum] < 25))  {
                     $e1 = $sched[11] ? $evid[$sched[11]]:0;
                     $e2 = $sched[12] ? $evid[$sched[12]]:0;
-                    $result = mysql_query("SELECT * FROM eventreg as e1, eventreg as e2 WHERE e1.geek=e2.geek AND e1.event=".$evid[$sched[$evnum]]." AND (e2.event=$e1 OR e2.event=$e2)", $db);
-                    $num1 = mysql_num_rows($result);
-                    $result = mysql_query("SELECT * FROM eventreg WHERE event=".$evid[$sched[$evnum]], $db);
-                    $num2 = mysql_num_rows($result);
-                    $name[$sched[$evnum]] .= " ($num1/$num2)";
+                    $conflicted = CalculateConflicts($db, $e1, $e2);
+                    $total_attendees = CalculateRegistered($db, $evid[$sched[$evnum]]);
+                    $name[$sched[$evnum]] .= " ($conflicted/$total_attendees)";
+                    $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[$evnum]]);
+                    if ($potential_attendees < $total_attendees) {
+                        $name[$sched[$evnum]] = "<span class='missing_attendees'>".$name[$sched[$evnum]]."</span>";
+                    }
                 }
             }
             if($sched[10] != 0) {
-                if ($sched[12] != 0) {
-                    $result = mysql_query("SELECT * FROM eventreg as e1, eventreg as e2 WHERE e1.geek=e2.geek AND e1.event=".$evid[$sched[10]]." AND e2.event=".$evid[$sched[12]], $db);
-                    $num1 = mysql_num_rows($result);
-                }
-                else {
-                    $num1 = 0;
-                }
-                $result = mysql_query("SELECT * FROM eventreg WHERE event=".$evid[$sched[10]], $db);
-                $num2 = mysql_num_rows($result);
-                $morning .= " ($num1/$num2)";
+                $conflicted = CalculateConflicts($db, $evid[$sched[10]], $evid[$sched[12]]);
+                $total_attendees = CalculateRegistered($db, $evid[$sched[10]]);
+                $morning .= " ($conflicted/$total_attendees)";
+	        $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[10]]);
+	        if ($potential_attendees < $total_attendees) {
+		    $morning = "<span class='missing_attendees'>$morning</span>";
+	        }
             }
             if($sched[11] != 0) {
-                if ($sched[12] != 0) {
-                    $result = mysql_query("SELECT * FROM eventreg as e1, eventreg as e2 WHERE e1.geek=e2.geek AND e1.event=".$evid[$sched[11]]." AND e2.event=".$evid[$sched[12]], $db);
-                    $num1 = mysql_num_rows($result);
-                }
-                else {
-                    $num1 = 0;
-                }
-                $result = mysql_query("SELECT * FROM eventreg WHERE event=".$evid[$sched[11]], $db);
-                $num2 = mysql_num_rows($result);
-                $afternoon .= " ($num1/$num2)";
+                $conflicted = CalculateConflicts($db, $evid[$sched[11]], $evid[$sched[12]]);
+                $total_attendees = CalculateRegistered($db, $evid[$sched[11]]);
+                $afternoon .= " ($conflicted/$total_attendees)";
+	        $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[11]]);
+	        if ($potential_attendees < $total_attendees) {
+		    #$afternoon = "<span class='missing_attendees'>$afternoon</span>";
+	        }
             }
             if($sched[12] != 0) {
-                $result = mysql_query("SELECT * FROM eventreg WHERE event=".$evid[$sched[12]], $db);
-                $num2 = mysql_num_rows($result);
-                $allday .= " ($num2)";
+                $total_attendees = CalculateRegistered($db, $evid[$sched[12]]);
+                $allday .= " ($total_attendees)";
+	        $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[12]]);
+	        if ($potential_attendees < $total_attendees) {
+		    $allday = "<span class='missing_attendees'>$allday</span>";
+	        }
             }
             for ($evnum=13; $evnum<20; $evnum++) {
                 if(($sched[$evnum] != 0) && ($sched[$evnum] <25)) {
-                    $result = mysql_query("SELECT * FROM eventreg WHERE event=".$evid[$sched[$evnum]], $db);
-                    $num2 = mysql_num_rows($result);
-                    $name[$sched[$evnum]] .= " ($num2)";
+                    $total_attendees = CalculateRegistered($db, $evid[$sched[$evnum]]);
+	            $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[$evnum]]);
+                    $name[$sched[$evnum]] .= " ($total_attendees)";
+	            if ($potential_attendees < $total_attendees) {
+		        $name[$sched[$evnum]] = "<span class='missing_attendees'>".
+                                                $name[$sched[$evnum]]."</span>";
+	            }
                 }
             }
         }

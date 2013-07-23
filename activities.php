@@ -41,11 +41,6 @@
 		$fid = $_REQUEST["fid$r"];
 		$evday = $_REQUEST["event${fid}day"];
 		$evhour = $_REQUEST["event${fid}hour"];
-/* not needed anymore
-		eval("\$fid = \$fid$r;");
-		eval("\$evday = \$event${fid}day;");
-		eval("\$evhour = \$event${fid}hour;");
-*/
 		$sql = "Update Events set day=$evday, hour=$evhour, type=$type, tslot=1 where id=$fid";
 		$result = mysql_query($sql, $db);
 		if (! $result)
@@ -97,15 +92,17 @@
                             $bgc1=" class='unscheduled'";
 			for($evday = 0; $evday < count($date) - 2; $evday++) {
 			    if ($myrow["day"] == $evday)
-				$sel = " selected";
+				$sel = "selected";
 			    else
 				$sel = "";
-			    if ($evday == 0)
-				$sched .= "<option value=$evday$sel>Unset";
-			    else
-				$sched .= "<option value=$evday$sel>$shortday[$evday] ".$date[$evday];
+			    $sched .= "<option value=$evday $sel>$shortday[$evday] ".$date[$evday]."</option>\n";
 			}
-			$sched .= "</select>";
+                        $sel = "";
+                        if (is_null($myrow["day"])) {
+                          $sel = "selected";
+                        }
+                        $sched .= "<option value=null $sel>Unset</option>\n";
+			$sched .= "</select>\n";
 			$sched .= "<select name=event".$myrow["fid"]."hour>";
 			for($evhour = 0; $evhour < 24; $evhour++) {
 			    if ($myrow["hour"] == $evhour)
