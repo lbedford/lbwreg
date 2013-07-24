@@ -19,7 +19,7 @@ $listmail = "lbw@x31.com";
 $frommail = "lbwreg@draiocht.net";
 
 # T-shirt information
-$Products = array("provisional");
+$Products = array("provisional", "bw");
 
 // level => price
 $Prices = array(0 => '15 - current guess');
