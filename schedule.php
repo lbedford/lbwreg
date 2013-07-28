@@ -1,39 +1,55 @@
 <?php
     include("basefunc.inc.php");
 
+    function RunMysqlQuery($db, $query) {
+        $result = mysql_query($query, $db);
+        if (!$result) {
+            error_log("Query failed: $query");
+            return 0;
+        }
+        $val = mysql_fetch_row($result)[0];
+        return !is_null($val) ? $val : 0;
+    }
+
     function CalculatePotentialAttendees($db, $event_id) {
         $query = "SELECT COUNT(people2.id) from people2, Events, eventreg ".
             "where people2.id = eventreg.geek and Events.id = eventreg.event ".
             "and Events.day < people2.departure and Events.day > people2.arrival ".
             "and eventreg.event=$event_id";
-        $result = mysql_query($query, $db);
-        if (!$result) {
-            error_log("Query failed: $query");
-            return 0;
-        }
-        return mysql_fetch_row($result)[0];
+        return RunMysqlQuery($db, $query);
     }
 
     function CalculateRegistered($db, $event_id) {
         $query = "SELECT COUNT(geek) FROM eventreg WHERE event=$event_id";
-        $result = mysql_query($query, $db);
-        if (!$result) {
-            error_log("Query failed: $query");
-            return 0;
-        }
-        return mysql_fetch_row($result)[0];
+        return RunMysqlQuery($db, $query);
     }
 
     function CalculateConflicts($db, $event_one, $event_two) {
         $query = "SELECT COUNT(e1.geek) FROM eventreg as e1, eventreg as e2 ".
                  "WHERE e1.geek=e2.geek AND e1.event=$event_one and ".
                  "e2.event=$event_two";
-        $result = mysql_query($query, $db);
-        if (!$result) {
-            error_log("Query failed: $query");
-            return 0;
-        }
-      return mysql_fetch_row($result)[0];
+        return RunMysqlQuery($db, $query);
+    }
+
+    function CalculateDepartures($db, $day) {
+        // total up the number of people departing today
+        $query = "SELECT SUM(attending+children) as deps ".
+                 "FROM people2 where departure = $day";
+        return RunMysqlQuery($db, $query);
+    } 
+
+    function CalculateArrivals($db, $day) {
+        // total up the number of people arriving today
+        $query = "SELECT SUM(attending+children) as arrs ".
+                 "FROM people2 where arrival = $day";
+        return RunMysqlQuery($db, $query);
+    }
+
+    function CalculateAttendees($db, $day) {
+        $query = "SELECT SUM(attending + children) as val ".
+                 "FROM people2 where arrival <= $day AND ".
+                 "departure > $day";
+        return RunMysqlQuery($db, $query);
     }
 
     /* variables from the environment (GET/POST) */
@@ -148,22 +164,11 @@
 
         echo "<br>";
 
-        // total up the number of people arriving today
-        $result = mysql_query("SELECT sum(attending+children) as arrs ".
-                              "FROM people2 where arrival = $day", $db);
-        $row = mysql_fetch_array($result);
-        $arr = $row["arrs"];
-        $arr = $arr ? $arr : 0;
 
-        // total up the number of people departing today
-        $result = mysql_query("SELECT sum(attending+children) as deps ".
-                              "FROM people2 where departure = $day", $db);
-        $row = mysql_fetch_array($result);
-        $dep = $row["deps"];
-        $dep = $dep ? $dep : 0;
+        $arr = CalculateArrivals($db, $day);
+        $dep = CalculateDepartures($db, $day);
 
-        // and figure out the number of attendees
-        $att = $att + $arr - $dep;
+        $att = CalculateAttendees($db, $day);
 
         echo "<table class='reginfo' width=100% ><tr ><th colspan=4>".
             $weekday[$day]." ".$date[$day]." ($arr arrival";
@@ -206,8 +211,11 @@
                     }
                 }
             }
-            if($sched[10] != 0) {
-                $conflicted = CalculateConflicts($db, $evid[$sched[10]], $evid[$sched[12]]);
+            if ($sched[10] != 0) {
+                $conflicted = 0;
+                if ($sched[12] != 0 ) {
+                  $conflicted = CalculateConflicts($db, $evid[$sched[10]], $evid[$sched[12]]);
+                }
                 $total_attendees = CalculateRegistered($db, $evid[$sched[10]]);
                 $morning .= " ($conflicted/$total_attendees)";
 	        $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[10]]);
@@ -215,8 +223,11 @@
 		    $morning = "<span class='missing_attendees'>$morning</span>";
 	        }
             }
-            if($sched[11] != 0) {
-                $conflicted = CalculateConflicts($db, $evid[$sched[11]], $evid[$sched[12]]);
+            if ($sched[11] != 0) {
+                $conflicted = 0;
+                if ($sched[12] != 0 ) {
+                  $conflicted = CalculateConflicts($db, $evid[$sched[11]], $evid[$sched[12]]);
+                }
                 $total_attendees = CalculateRegistered($db, $evid[$sched[11]]);
                 $afternoon .= " ($conflicted/$total_attendees)";
 	        $potential_attendees = CalculatePotentialAttendees($db, $evid[$sched[11]]);
