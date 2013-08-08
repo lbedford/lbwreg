@@ -114,7 +114,8 @@
 			$sched .= "</select>";
 		    }
 		} else {
-		    $sched = Event2sched($myrow);
+		    $sched = Event2sched($myrow["type"], $myrow["day"],
+                                         $myrow["hour"], $myrow["forum_duration"]);
 		}
 
 		printf("<tr ><td $bgc$bgc1><a href=forum.php?forum=%d>%s</a></td><td $bgc><a href='userview.php?user=%d'>%s %s</a></td><td align='center' $bgc>%s</td><td align='center' $bgc> %s</td><td align='right' $bgc>%s</td></tr>\n",

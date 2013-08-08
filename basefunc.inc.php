@@ -112,25 +112,26 @@
         return $geekname;
     }
      
-    function Event2sched($row) {
+    function Event2sched($type, $day, $hour, $duration) {
 	global $shortday;
         global $timestamps;
-	if ($row["type"] == 1)
+	if ($type == 1)
 	    $sched = "All Week";
 	else {
-	    $evday = $row["day"];
+	    $evday = $day;
 	    if ($evday < 1)
 		$sched = "Not yet scheduled";
 	    else {
-		$hr = $row["hour"];
-                $starttimestamp = $timestamps[$evday] + ($hr * 3600);
-                $endtimestamp = $starttimestamp + ($row["duration"] * 3600);
+                $starttimestamp = $timestamps[$evday] + ($hour * 3600);
+                $endtimestamp = $starttimestamp + ($duration * 3600);
                 $endformat = "H:i";
                 if (date("l", $starttimestamp) != date("l", $endtimestamp)) {
                   $endformat = "l ".$endformat;
                 }
-                $end = $hr + $row["duration"];
-		if ($hr < 10) $hr = "&ensp;$hr";
+                $end = $hour + $duration;
+		if ($hour < 10) {
+                  $hour = "&ensp;$hour";
+                }
                 $sched = date("l j F H:i", $starttimestamp)." - ".date($endformat, $endtimestamp);
 	    }
 	}
