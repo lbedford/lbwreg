@@ -25,38 +25,38 @@ $Products = array("provisional", "bw");
 $Prices = array(0 => '15 - current guess');
 
 $Sizes = array("Men's - Small",
-               "Men's - Medium",
-               "Men's - Large",
-               "Men's - XL",
-               "Men's - 2XL",
-               "Men's - 3XL",
-               "Men's - 4XL",
-               "Men's - 5XL",
-               "Women's - Small",
-               "Women's - Medium",
-               "Women's - Large",
-               "Women's - XL");
+  "Men's - Medium",
+  "Men's - Large",
+  "Men's - XL",
+  "Men's - 2XL",
+  "Men's - 3XL",
+  "Men's - 4XL",
+  "Men's - 5XL",
+  "Women's - Small",
+  "Women's - Medium",
+  "Women's - Large",
+  "Women's - XL");
 
 $menu = array(
 //      pagename              caption            passlevel
-  array("welcome.php",        "Welcome",         2),
-  array("activities.php",     "Activities",      2),
-  array("schedule.php",       "Schedule",        2),
-  array("t-shirts.php",       "T-shirts",        2),
-  array("participants.php",   "Participants",    2),
-  array("gallery.php",        "Gallery",         2),
-  array("rides.php",          "Rides",           4),
+  array("welcome.php", "Welcome", 2),
+  array("activities.php", "Activities", 2),
+  array("schedule.php", "Schedule", 2),
+  array("t-shirts.php", "T-shirts", 2),
+  array("participants.php", "Participants", 2),
+  array("gallery.php", "Gallery", 2),
+  array("rides.php", "Rides", 4),
   array("changepassword.php", "Change Password", 2),
-  array("logout.php",         "Logout",          2),
+  array("logout.php", "Logout", 2),
 );
 
 $pixupdate_string = "<span title='Place a picture file named mid_&lt;year&gt;_&lt;userid&gt;.jpg in reg/gallery/, then do update...'>Pix-update</span>";
 
 $admin_menu = array(
 //      pagename              caption            passlevel
-  array("updategallery.php",  $pixupdate_string, 8),
-  array("users.php",          "Users" ,          8),
-  array("source.php",         "Source",          8),
+  array("updategallery.php", $pixupdate_string, 8),
+  array("users.php", "Users", 8),
+  array("source.php", "Source", 8),
 );
 
 # Event type max length

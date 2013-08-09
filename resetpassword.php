@@ -1,7 +1,7 @@
 <?php
-    require("basefunc.inc.php");
-     
-    HtmlHead("resetpassword", "Reset Password", "", "");
+require("basefunc.inc.php");
+
+HtmlHead("resetpassword", "Reset Password", "", "");
 ?>
 
 
@@ -23,15 +23,15 @@ changed by sbolis on Tue May  1 17:48:13 EEST 2007
 </table>
 -->
 
-<form method="post" action="<?php echo $regpath;?>/reset.php">
-    First name: <input type="text" name="firstname" size="40" /><br />
-    Surname:<input type="text" name="surname" size="40" /><br />
-    Your login details will be mailed to the email address that you used when you registered.  <br />
-    <input type="submit" name="Reset" value="Submit" />
+<form method="post" action="<?php echo $regpath; ?>/reset.php">
+  <label for='firstname'>First name:</label><input type="text" name="firstname" size="40"/><br/>
+  <label for='surname'>Surname:</label><input type="text" name="surname" size="40"/><br/>
+  Your login details will be mailed to the email address that you used when you registered. <br/>
+  <input type="submit" name="Reset" value="Submit"/>
 </form>
 
 
 
 <?php
-    HtmlTail()
+HtmlTail()
 ?>

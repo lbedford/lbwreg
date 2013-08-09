@@ -1,15 +1,31 @@
-	  If you don't already have a username and password, you should <a
-	  href="register.php">register</a> first.<br />
-	  If you've forgotten your password, you can <a href="resetpassword.php">reset it</a>, and it will be sent to your registered email address.
+If you don't already have a username and password, you should <a
+        href="/register.php">register</a> first.<br/>
+If you've forgotten your password, you can <a href="/resetpassword.php">reset
+    it</a>, and it will be sent to your registered email address.
 
-	  </p>
+</p>
 
-	    <form method="post" action="<?php echo $regpath; ?>/verify.php">
-	      <table class='reginfo'>
-		<tr><td>Login <sup>&Dagger;</sup>:	</td><td><input type="text" name="logon" size="40" />		</td></tr>
-		<tr><td>Password:			</td><td><input type="password" name="password" size="40" />	</td></tr>
-		<tr><td>				</td><td align="right"><input type="submit" name="submit" value="Log in" />	</td></tr>
-	      </table>
-	    </form>
-	    <small>&Dagger; Those who have registered for an earlier LBW may use the same login and password for this site<br />
-	    </small>
+<form method="post" action="/verify.php">
+    <table class='reginfo'>
+        <tr>
+            <td>Login <sup>&Dagger;</sup>:</td>
+            <td><label>
+                <input type="text" name="logon" size="40"/>
+
+            </label></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><label>
+                <input type="password" name="password" size="40"/>
+
+            </label></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td align="right"><input type="submit" name="submit" value="Log in"/></td>
+        </tr>
+    </table>
+</form>
+<small>&Dagger; Those who have registered for an earlier LBW may use the same login and password for this site<br/>
+</small>

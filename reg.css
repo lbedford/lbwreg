@@ -1,64 +1,70 @@
-  hr		{ width: 90%; }
-  
-  .subnavbar	{ 
-		  border-bottom: solid black 1px;
-		  margin: 0 auto 0 auto;
-		  padding: 0.4ex;
-		  text-align: center;
-		  font-family: Verdana, Optima, Helvetica, sans-serif;
-		  font-size: 8pt;
-		  width: 95ex;
-		  font-style: italic;
-		  background-color: #44A; 
-		  color: #FFF;
-		}
+hr {
+    width: 90%;
+}
 
-  .subnavbar a	{ 
-		  text-decoration: none; 
-		  color: #FF8;
-		}
+.subnavbar {
+    border-bottom: solid black 1px;
+    margin: 0 auto 0 auto;
+    padding: 0.4ex;
+    text-align: center;
+    font-family: Verdana, Optima, Helvetica, sans-serif;
+    font-size: 8pt;
+    width: 95ex;
+    font-style: italic;
+    background-color: #44A;
+    color: #FFF;
+}
 
-  .adminbar	{ 
-		  border-bottom: solid black 1px;
-		  margin: 0.5ex auto 0 auto;
-		  padding: 0.4ex 1ex;
-		  width: 28ex;
-		  text-align: center;
-		  font-family: Verdana, Optima, Helvetica, sans-serif;
-		  font-size: 8pt;
-		  font-style: italic;
-		  background-color: #A44; 
-		  color: #FFF;
-		}
+.subnavbar a {
+    text-decoration: none;
+    color: #FF8;
+}
 
-  .adminbar a	{ 
-		  text-decoration: none; 
-		  color: #FF8;
-		}
+.adminbar {
+    border-bottom: solid black 1px;
+    margin: 0.5ex auto 0 auto;
+    padding: 0.4ex 1ex;
+    width: 28ex;
+    text-align: center;
+    font-family: Verdana, Optima, Helvetica, sans-serif;
+    font-size: 8pt;
+    font-style: italic;
+    background-color: #A44;
+    color: #FFF;
+}
 
-  .centercolumn {
-		  text-align: center;
-		}
+.adminbar a {
+    text-decoration: none;
+    color: #FF8;
+}
 
-  .reginfo	{
-		  margin: 0 auto 0 auto;
-		  border: outset gray 1px;
-		} 
+.centercolumn {
+    text-align: center;
+}
 
-  .reginfo td	{
-		  border: none black 0px;
-		  background-color: #EEE;
-		}
+.reginfo {
+    margin: 0 auto 0 auto;
+    border: outset gray 1px;
+}
 
-  .reginfo th	{
-		  border: none black 0px;
-		  background-color: #DDD;
-		}
+.reginfo td {
+    border: none black 0;
+    background-color: #EEE;
+}
 
-  .unscheduled 	{ 
-		  background-color: #EE6 !important;
-	        }
+.reginfo th {
+    border: none black 0;
+    background-color: #DDD;
+}
 
-  .missing_attendees {
-                  background-color: #FF0000;
-                     }
+.unscheduled {
+    background-color: #EE6 !important;
+}
+
+.missing_attendees {
+    background-color: #FF0000;
+}
+
+.conflict {
+    background-color: #FF0000;
+}
