@@ -39,9 +39,9 @@ if (!$result) {
 
 global $date, $acctype;
 $r2 = mysql_query("SELECT Count(*) AS count,sum(attending) AS geeks,sum(children)AS kids FROM people2 WHERE (attending>0) AND (status>1)", $db);
-echo "<table class='reginfo'  cellpadding=1 >\n";
+echo "<table class='reginfo'>\n";
 $totals = mysql_fetch_array($r2);
-printf("<tr ><TH COLSPAN=6 ALIGN=CENTER>Registered Users (%d registrations; %d adults and %d children):</th></tr>\n", $totals["count"], $totals["geeks"], $totals["kids"]);
+printf("<tr ><TH COLSPAN=6>Registered Users (%d registrations; %d adults and %d children):</th></tr>\n", $totals["count"], $totals["geeks"], $totals["kids"]);
 echo "<tr ><th><A href='?order=surname'>Name</a></th>";
 echo "<th><A href='?order=city,surname'>City</a>,&nbsp;&nbsp;<A href='?order=country,city,surname'>Country</a></th><th>Adults<br>Children</th><th>Dates</th><th><A href='?order=kindofaccomodation'>Accomodation</a></th><th><a href='?order=present'>Present</a></tr>\n";
 while ($row = mysql_fetch_array($result)) {
@@ -51,7 +51,7 @@ while ($row = mysql_fetch_array($result)) {
 
   printf("</td><td>%s, %s</td>", $row["city"], $row["country"]);
   printf("<td>%d + %d</td>", $row["attending"], $row["children"]);
-  printf("<TD align=center> %s - %s</a></td>", $date[$row["arrival"]], $date[$row["departure"]]);
+  printf("<TD> %s - %s</a></td>", $date[$row["arrival"]], $date[$row["departure"]]);
   printf("<td>%s</td>\n", $acctype[$row["kindofaccomodation"]]);
   printf("<td>%s</td></tr>\n", $row["present"] ? "Yes" : "No");
 }
@@ -64,9 +64,9 @@ $result = mysql_query($sql, $db);
 if (!$result)
   printf("%s<br>\n", mysql_error($db));
 else {
-  printf("<table class='reginfo' CELLPADDING=1 ><tr ><TH COLSPAN=4>By Country</th></tr><tr ><th>Country</th><th>Entries</th><th>Adults</th><th>Children</th></tr>\n");
+  printf("<table class='reginfo' ><tr ><TH COLSPAN=4>By Country</th></tr><tr ><th>Country</th><th>Entries</th><th>Adults</th><th>Children</th></tr>\n");
   while ($row = mysql_fetch_array($result)) {
-    printf("<tr><td> %s </td><TD align=center> %s </td><TD align=center> %s </td><TD align=center> %s</td></tr>\n", $row["name"], $row["q"], $row["number"], $row["kids"]);
+    printf("<tr><td> %s </td><TD> %s </td><TD> %s </td><TD> %s</td></tr>\n", $row["name"], $row["q"], $row["number"], $row["kids"]);
   }
   printf("</table>\n");
 }

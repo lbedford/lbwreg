@@ -97,8 +97,8 @@ HtmlHead("forum", $foruminfo["name"], $_SESSION["userstatus"], $_SESSION["userid
 echo "";
 
 $nv = GetlbwUser($foruminfo["owner"], $db);
-echo "<table class='reginfo' WIDTH=98% >";
-printf("<tr ><TH ALIGN=CENTER COLSPAN=3> %s <br> %s <br><A href=userview.php?user=%d>%s %s</a></td></tr>\n",
+echo "<table class='reginfo'>";
+printf("<tr ><TH COLSPAN=3> %s <br> %s <br><A href=userview.php?user=%d>%s %s</a></td></tr>\n",
   stripslashes($foruminfo["name"]), $honchostr, $foruminfo["owner"], $nv[0], $nv[1]);
 printf("<tr><TD COLSPAN=3>%s</td></tr>\n", text2html(stripslashes($foruminfo["description"])));
 
@@ -106,11 +106,11 @@ printf("<tr><TD COLSPAN=3>%s</td></tr>\n", text2html(stripslashes($foruminfo["de
 if ($honcho || $_SESSION["userstatus"] >= 16) { // ------------- Show Forum Owners options --------------
   ?>
   <tr>
-    <th width=33%>
+    <th>
       <a href=forumedit.php?forum=<?php echo $forum ?> >Edit the event information</a>
     </th>
-    <th width=34%>&nbsp;</th>
-    <th width=33%>
+    <th>&nbsp;</th>
+    <th>
       <a href=forumedit.php?option=cancel&forum=<?php echo $forum ?>>Cancel the event</a>
     </th>
   </tr>
@@ -118,17 +118,17 @@ if ($honcho || $_SESSION["userstatus"] >= 16) { // ------------- Show Forum Owne
 }
 if (!$honcho) {
   if ($_SESSION["userstatus"] > 2) {
-    echo "<tr ><TH width=33%>&nbsp;</th><TH width=34%><FORM METHOD=POST><INPUT TYPE=HIDDEN NAME=forum VALUE=$forum>\n";
-    printf("<INPUT TYPE=SUBMIT NAME=submit VALUE=%s></form></th><TH width=33%%>&nbsp;</th></tr>",
+    echo "<tr><td>&nbsp;</td><td><FORM METHOD=POST><INPUT TYPE=HIDDEN NAME=forum VALUE=$forum>\n";
+    printf("<INPUT TYPE=SUBMIT NAME=submit VALUE=%s></form></td><td>&nbsp;</td></tr>",
       $registered ? "UNREGISTER" : "REGISTER");
   } else {
-    echo "<tr ><TD COLSPAN=3 align=center>";
+    echo "<tr ><TD COLSPAN=3>";
     echo "You will be able to register to attend this event when your access has been approved by the organisers";
     echo "<br>We Regret the inconvenience caused by Script Kiddies<br></td></tr>";
   }
 }
 
-$result = mysql_query("SELECT day FROM Events WHERE id=$forum");
+$result = mysql_query("SELECT day FROM Events WHERE id='$forum'");
 if (!$result) {
   error_log("$query failed");
   $day = null;
@@ -140,12 +140,16 @@ if (!$result) {
 }
 
 
-$query = "SELECT geek,event,firstname,surname FROM eventreg,people2  WHERE (people2.id=geek) AND (event=$forum) AND (geek != $owner)";
+$query = "SELECT geek,event,firstname,surname FROM eventreg,people2 " .
+    "WHERE (people2.id=geek) AND (event='$forum') AND (geek != '$owner')";
 $result = mysql_query($query, $db);
+if (!$result) {
+  error_log(mysql_error($db));
+}
 $count = mysql_num_rows($result);
 echo "<tr ><TH COLSPAN=3>There are $count people registered for this activity:</th></tr>";
 if ($count) {
-  echo "<tr><TD COLSPAN=3><table class='reginfo' WIDTH=100% >";
+  echo "<tr><TD COLSPAN=3><table class='reginfo'>";
   $col = 0;
   while ($reg = mysql_fetch_array($result)) {
     if (($col % 3) == 0)
@@ -170,7 +174,7 @@ if ($count) {
         $span_class = "class='missing_attendees'";
       }
     }
-    echo "<span $span_class>";
+    echo "<span " . $span_class . ">";
     printf("<A href=userview.php?user=%d>%s %s</a>", $reg["geek"],
       $reg["firstname"], $reg["surname"]);
     echo "</span>";
@@ -196,9 +200,9 @@ echo "</td></table>";
 
 // Message board
 echo "<A name=messages></a>";
-echo "<table class='reginfo' WIDTH=98% >";
+echo "<table class='reginfo'>";
 $post_message = "<A href=messages.php?submit=write>Post a message</a>";
-printf("<tr ><TD ALIGN=CENTER COLSPAN=4>Message Board<br>%d Messages in this Forum",
+printf("<tr ><TD COLSPAN=4>Message Board<br>%d Messages in this Forum",
   $foruminfo["messages"]);
 printf("<br>%s</td></tr>\n", ($_SESSION["userstatus"] > 2) ? $post_message : "");
 if ($foruminfo["messages"]) {
@@ -208,7 +212,7 @@ if ($foruminfo["messages"]) {
   $result = mysql_query($sql, $db);
   if (!$result)
     printf("%s<br>", mysql_error($db));
-  echo "<tr><TH width=25%>From</th><TH width=35%>Subject</th><TH width = 20%>Time</th><th>&nbsp;</th></tr>";
+  echo "<tr><TH>From</th><TH>Subject</th><TH>Time</th><th>&nbsp;</th></tr>";
   while ($msg = mysql_fetch_array($result)) {
     printf("<tr><td>%s %s</td><td>%s</td><td>%s</td><td>" .
       "<A HREF=messages.php?submit=read&number=%d>Read</a></td></tr>\n",

@@ -11,8 +11,8 @@ if (array_key_exists("userid", $_SESSION)) {
 HtmlHead("login", "Login", "", "");
 include("html/loginform.html");
 ?>
-<iframe frameborder="no" width="600px" height="200px"
-        src="/analytics/index.php?module=CoreAdminHome&action=optOut&language=en"></iframe>
+<iframe width="600px" height="200px"
+        src="analytics/index.php?module=CoreAdminHome&action=optOut&language=en"></iframe>
 <?php
 HtmlTail();
 ?>

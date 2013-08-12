@@ -14,7 +14,7 @@ if (array_key_exists('lbwid', $_REQUEST)) {
   $lbwid = $_REQUEST['lbwid'];
   $new_location = "userview.php?user=$lbwid";
   $lbwid = mysql_real_escape_string(trim($lbwid));
-  $result = mysql_query("SELECT status, firstname, surname FROM people2 WHERE id=$lbwid", $db);
+  $result = mysql_query("SELECT status, firstname, surname FROM people2 WHERE id='$lbwid'", $db);
   if ($result) {
     $row = mysql_fetch_array($result);
 
@@ -34,7 +34,7 @@ if (array_key_exists('lbwid', $_REQUEST)) {
         HtmlTail();
         exit();
       } else if ($certain == "yes") {
-        $sql = "DELETE FROM people2 WHERE id=$lbwid";
+        $sql = "DELETE FROM people2 WHERE id='$lbwid'";
         $result = mysql_query($sql, $db);
         $new_location = "users.php";
       } else {
@@ -59,7 +59,7 @@ if (array_key_exists('lbwid', $_REQUEST)) {
         exit();
       }
 
-      $sql = "UPDATE people2 SET $field='$status' WHERE id=$lbwid";
+      $sql = "UPDATE people2 SET " . $field . "='$status' WHERE id='$lbwid'";
       $result = mysql_query($sql, $db);
     }
 

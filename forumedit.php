@@ -42,10 +42,10 @@ switch ($option) {
       printf("<FORM METHOD=POST>\n");
       printf("<INPUT TYPE=HIDDEN NAME=event VALUE=%d>\n", $forum);
       printf("Title<br>\n");
-      printf("<INPUT TYPE=TEXT NAME=\"heading\" VALUE=\"%s\"  SIZE=50 MAXLEN=50><br>",
+      printf("<INPUT TYPE=TEXT NAME=\"heading\" VALUE=\"%s\"  SIZE=50><br>",
         stripslashes($myrow["name"]));
       printf("Schedule entry<br>\n");
-      printf("<INPUT TYPE=TEXT NAME=\"schedtxt\" VALUE=\"%s\"  SIZE=12 MAXLEN=12><br>",
+      printf("<INPUT TYPE=TEXT NAME=\"schedtxt\" VALUE=\"%s\"  SIZE=12><br>",
         stripslashes($myrow["schedtxt"]));
       printf("Details <br>\n");
       printf("<TEXTAREA NAME=description COLS=70 ROWS=20>\n%s", $myrow["description"]);
@@ -65,7 +65,7 @@ switch ($option) {
           echo "<select name=\"forum_duration\" >";
           for ($i = 1; $i <= $eventmaxhours[$myrow["type"]]; $i++) {
             $s = ($i == $myrow["forum_duration"]) ? "selected" : "";
-            echo "<option value='$i' $s> $i\n";
+            echo "<option value='$i' " . $s . "> $i\n";
           }
           echo "\n</select> Hour forum_duration.<br>\n";
           break;
@@ -75,7 +75,7 @@ switch ($option) {
           printf("The Event will be about <select name='forum_duration' >");
           for ($i = 1; $i <= $eventmaxhours[$myrow["type"]]; $i++) {
             $s = ($i == $myrow["forum_duration"]) ? "selected" : "";
-            echo "<option value='$i' $s> $i\n";
+            echo "<option value='$i' " . $s . "> $i\n";
           }
           printf("</select> hours long<br>\n");
           break;
@@ -103,8 +103,11 @@ switch ($option) {
     //comes from Edit option:
     if (!honchocheck($_SESSION["userid"], $event, $db))
       break;
-    $heading = addslashes($heading);
-    $description = addslashes($description);
+    $number = GetEntryFromRequest('number', -1);
+    $heading = addslashes(GetEntryFromRequest('heading', ''));
+    $description = addslashes(GetEntryFromRequest('description', ''));
+    $schedtxt = GetEntryFromRequest('schedtxt', '');
+    $forum_duration = GetEntryFromRequest('forum_duration', 1);
     $sql = "UPDATE Events SET name='$heading', schedtxt='$schedtxt', " .
         "description='$description', number='$number', forum_duration='$forum_duration' WHERE id=$event";
     $result = mysql_query($sql, $db);
@@ -129,7 +132,7 @@ switch ($option) {
       break;
     }
     $result = mysql_query("DELETE FROM eventreg WHERE event='$forum'", $db);
-    $result = mysql_query("DELETE FROM Events WHERE id=$forum", $db);
+    $result = mysql_query("DELETE FROM Events WHERE id='$forum'", $db);
     if ($_SESSION["userforum"] == $forum)
       $_SESSION["userforum"] = 1;
     header("Location: activities.php");

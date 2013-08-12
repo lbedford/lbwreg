@@ -4,42 +4,36 @@ include("basefunc.inc.php");
 
 /* variables from environment (GET/POST) */
 
-$_SESSION["userid"] = 0;
-session_start();
-if (!$_SESSION["userid"]) {
-  header("Location: login.php");
-  exit();
-}
-
-// extract session first so the request can't override it.
-extract($_SESSION);
-extract($_REQUEST, EXTR_SKIP);
+CheckLoggedInOrRedirect();
 
 $db = connectMysql();
 
-if (isset($size)) {
-  $size = mysql_real_escape_string(trim($size));
-}
-if (isset($product)) {
-  $product = mysql_real_escape_string(trim($product));
-}
-if (isset($record)) {
-  $record = mysql_real_escape_string(trim($record));
-}
-if (isset($number)) {
-  $number = mysql_real_escape_string(trim($number));
-}
 
 $ProductCount = count($Products);
-if (isset($option)) {
-  switch ($option) {
+if (array_key_exists('option', $_REQUEST)) {
+  switch ($_REQUEST['option']) {
     case "Order":
-      $quantity = intval($number);
+      # needs $number, $product, $size
+      $size = -1;
+      if (array_key_exists('size', $_REQUEST)) {
+        $size = mysql_real_escape_string(trim($_REQUEST['size']));
+      }
+      $product = -1;
+      if (array_key_exists('product', $_REQUEST)) {
+        $product = mysql_real_escape_string(trim($_REQUEST['product']));
+      }
+
+
       $result = mysql_query("SELECT * from tshirts where (person='" . $_SESSION["userid"] . "') AND (size='$size') AND (product='$product') ", $db);
       if (!$result) {
         echo mysql_error($db);
       }
       if (!mysql_num_rows($result)) {
+        $number = 0;
+        if (array_key_exists('number', $_REQUEST)) {
+          $number = mysql_real_escape_string(trim($_REQUEST['number']));
+        }
+        $quantity = intval($number);
         if ($quantity > 0)
           if (!mysql_query("INSERT INTO tshirts (person,name,product,quantity,size) VALUES ('" . $_SESSION["userid"] . "','" . $_SESSION["username"] . "','$product','$quantity','$size')", $db))
             echo mysql_error($db) . "<br>";
@@ -47,9 +41,16 @@ if (isset($option)) {
       break;
 
     case "change":
+      $record = -1;
+      if (array_key_exists('record', $_REQUEST)) {
+        $record = mysql_real_escape_string(trim($_REQUEST['record']));
+      }
       $result = mysql_query("SELECT person, product, size, quantity FROM tshirts WHERE (ref='$record')", $db);
       $row = mysql_fetch_array($result);
-      extract($row);
+      $person = $row['person'];
+      $product = $row['product'];
+      $size = $row['size'];
+      $quantity = $row['quantity'];
       if ($_SESSION["userid"] != $person)
         header("Location: t-shirts.php");
 
@@ -62,7 +63,15 @@ if (isset($option)) {
       exit();
 
     case "Update":
+      $number = 0;
+      if (array_key_exists('number', $_REQUEST)) {
+        $number = mysql_real_escape_string(trim($_REQUEST['number']));
+      }
       $quantity = intval($number);
+      $record = -1;
+      if (array_key_exists('record', $_REQUEST)) {
+        $record = mysql_real_escape_string(trim($_REQUEST['record']));
+      }
       if ($quantity == 0) {
         mysql_query("DELETE FROM tshirts WHERE (ref='$record') AND (person='" . $_SESSION["userid"] . "')", $db);
         break;
@@ -76,15 +85,23 @@ $pagestat = 0;
 HtmlHead("tshirts", "T-Shirt Order Page", $_SESSION["userstatus"], $_SESSION["userid"]);
 
 
-if (($_SESSION["userid"] == 9) || ($_SESSION["userstatus"] > 8)) {
-  echo "<br><table class='reginfo' ><tr><th><A href=productorders.php>Order Status</a></th></tr></table><br>";
+if ($_SESSION["userstatus"] > 8) {
+  echo "<br/>";
+  echo "<table class='reginfo' >";
+  echo "<tr>";
+  echo "<th>";
+  echo "<A href=productorders.php>Order Status</a>";
+  echo "</th>";
+  echo "</tr>";
+  echo "</table>";
+  echo "<br/>";
 }
 
 
 $now = time();
 # mktime(hour, minute, second, month, day, year, isDst)
 $open = mktime(00, 00, 00, 6, 10, 2011);
-$close = mktime(00, 00, 00, 8, 6, 2013);
+$close = mktime(00, 00, 00, 8, 6, 2017);
 if ($now < $open) {
   echo "<h2>Orders not open yet! Sorry!</h2>";
 } else if ($open <= $now && $now < $close) {
@@ -106,7 +123,7 @@ if ($now < $open) {
   echo "<h2>Orders closed! Sorry!</h2>";
 }
 
-echo "<table class='reginfo' cellpadding='0'>\n";
+echo "<table class='reginfo'>\n";
 $colspan = $ProductCount + 1;
 $sql = "SELECT SUM(quantity) FROM tshirts";
 $result = mysql_query($sql, $db);
@@ -134,17 +151,20 @@ echo "<h3>Important: </h3><p>T-shirts will not be shipped. " .
 echo "</td>";
 echo "</tr>";
 echo "<tr><th colspan=$colspan></th></tr>\n";
-$result = mysql_query("select * from tshirts where person='" . $_SESSION["userid"] . "'", $db);
+$result = mysql_query("select ref, quantity, product, size from tshirts where person='" . $_SESSION["userid"] . "'", $db);
 if (!$result) {
   echo mysql_error($db);
 }
 if (mysql_num_rows($result) > 0) {
   echo "<tr ><TH colspan=$ProductCount>Your current order</th></tr>";
   echo "<tr ><TD Colspan=$ProductCount><b>";
-  echo "<table class='reginfo' width=100% >";
-  echo "<tr><TH width=10%>Number</th><TH width=10%>Style</th><TH width=20%>Size</th><TH width=20%>Total Price per Order</TH><TH width=30%>&nbsp;</th></tr>";
+  echo "<table class='reginfo'>";
+  echo "<tr><TH>Number</th><TH>Style</th><TH>Size</th><TH>Total Price per Order</TH><TH>&nbsp;</th></tr>";
   while ($row = mysql_fetch_array($result)) {
-    extract($row);
+    $quantity = $row['quantity'];
+    $product = $row['product'];
+    $size = $row['size'];
+    $ref = $row['ref'];
     if ($pagestat)
       printf("<tr><td>%d</td><td style=\"text-align: center;\">%s</td>" .
         "<td style=\"text-align: center;\">%s</td>" .
@@ -160,9 +180,10 @@ if (mysql_num_rows($result) > 0) {
   echo "<tr><TH COLSPAN=4> <br>You have not ordered any of our fine T-shirts yet<br>&nbsp;</th></tr>\n";
 }
 if ($pagestat > 0) {
-  echo "<tr ><td colspan=$ProductCount align=center valign=middle><FORM METHOD=POST>";
+  echo "<tr ><td colspan=$ProductCount>";
+  echo "<FORM METHOD=POST>";
 
-  echo "<b>Add <INPUT TYPE=TEXT NAME=number value=1 SIZE=4 MAXLEN=4> Size <SELECT name=size></b>";
+  echo "<b>Add <INPUT TYPE=TEXT NAME=number value=1 SIZE=4> Size <SELECT name=size></b>";
   foreach ($Sizes as $i => $size)
     printf("<option value='$i' %s> $size </option>\n", ($i == 7) ? "selected" : "");
   echo "</select>";

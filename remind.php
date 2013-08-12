@@ -99,7 +99,7 @@ switch ($status) {
       echo "You should receive it shortly.<br></h4><hr>\n";
       echo "";
       echo "<ul>\n<li><A HREF='login.php'>Return to login page while waiting</a></li>";
-      echo "<li><A HREF='$eventhost'> Go to the event main page</a></li></ul>";
+      echo "<li><A HREF='" . $eventhost . "'> Go to the event main page</a></li></ul>";
       echo "";
     } else {
       echo "mail problem<br>";
@@ -124,7 +124,7 @@ switch ($status) {
     echo "You should receive it shortly<br></h2><hr>\n";
     echo "";
     echo "<ul>\n<li><A HREF=login.php>Return to login page while waiting</a></li>";
-    echo "<li><A HREF='$eventhost'> Go to the Lbw Home Page</a></li></ul>";
+    echo "<li><A HREF='" . $eventhost . "'> Go to the Lbw Home Page</a></li></ul>";
     echo "";
     break;
   case 4:

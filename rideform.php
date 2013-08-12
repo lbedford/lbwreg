@@ -1,21 +1,16 @@
 <?php
 include("basefunc.inc.php");
 
-
-$_SESSION["userid"] = 0;
-session_start();
-if (!$_SESSION["userid"]) {
-  header("Location: login.php");
-  exit();
-}
+CheckLoggedInOrRedirect();
 
 $userstatus = $_SESSION['userstatus'];
+$userid = $_SESSION['userid'];
 $db = connectMysql();
 
 switch ($_REQUEST['option']) {
   case "edit":
     $ride = mysql_real_escape_string(trim($_REQUEST['ride']));
-    $row = mysql_fetch_array(mysql_query("SELECT person, type, email, dest, orig, date, space, notes FROM rides WHERE id=$ride", $db));
+    $row = mysql_fetch_array(mysql_query("SELECT person, type, email, dest, orig, date, space, notes FROM rides WHERE id='$ride'", $db));
     if ($row["person"] != $userid) {
       echo "You can not edit this entry<br>";
       HtmlTail();
@@ -49,14 +44,14 @@ switch ($_REQUEST['option']) {
 
 // TODO(lbedford): escape this stuff too
   case "save":
-    $xtype = mysql_real_escape_string(trim($xtype));
-    $orig = mysql_real_escape_string(trim($orig));
-    $dest = mysql_real_escape_string(trim($dest));
-    $xdate = mysql_real_escape_string(trim($xdate));
-    $email = mysql_real_escape_string(trim($email));
-    $space = mysql_real_escape_string(trim($space));
-    $notes = mysql_real_escape_string(trim($notes));
-    $sql = "INSERT INTO rides (type,orig,dest,date,person,email,space,notes) VALUES('$xtype','$orig','$dest','$xdate',$userid,'$email','$space','$notes')";
+    $xtype = GetEntryFromRequest('xtype', 'null');
+    $orig = GetEntryFromRequest('orig', 'null');
+    $dest = GetEntryFromRequest('dest', 'null');
+    $xdate = GetEntryFromRequest('xdate', 'null');
+    $email = GetEntryFromRequest('email', 'null');
+    $space = GetEntryFromRequest('space', 'null');
+    $notes = GetEntryFromRequest('notes', 'null');
+    $sql = "INSERT INTO rides (type,orig,dest,date,person,email,space,notes) VALUES('$xtype','$orig','$dest','$xdate','$userid','$email','$space','$notes')";
     if (!($result = mysql_query($sql, $db))) {
       echo mysql_error($db);
     }
@@ -66,18 +61,18 @@ switch ($_REQUEST['option']) {
     exit();
 
   case "update":
-    $orig = mysql_real_escape_string(trim($orig));
-    $dest = mysql_real_escape_string(trim($dest));
-    $xdate = mysql_real_escape_string(trim($xdate));
-    $space = mysql_real_escape_string(trim($space));
-    $notes = mysql_real_escape_string(trim($notes));
+    $orig = GetEntryFromRequest('orig', 'null');
+    $dest = GetEntryFromRequest('dest', 'null');
+    $xdate = GetEntryFromRequest('xdate', 'null');
+    $space = GetEntryFromRequest('space', 'null');
+    $notes = GetEntryFromRequest('notes', 'null');
     mysql_query("UPDATE rides SET orig='$orig',dest='$dest',date='$xdate',space='$space',notes='$notes' WHERE id='$ride'", $db);
     header("Location: rides.php");
     exit();
 
   case "delete":
     $ride = mysql_real_escape_string(trim($ride));
-    $sql = "DELETE FROM rides WHERE id=$ride";
+    $sql = "DELETE FROM rides WHERE id='$ride'";
     mysql_query($sql, $db);
     header("Location: rides.php");
     exit();
@@ -89,7 +84,7 @@ switch ($_REQUEST['option']) {
       $xtype = "offer";
     if (!strncasecmp("Reque", $option, 5))
       $xtype = "request";
-    $row = mysql_fetch_array(mysql_query("SELECT firstname,surname,email FROM people2 WHERE id=$userid", $db));
+    $row = mysql_fetch_array(mysql_query("SELECT firstname,surname,email FROM people2 WHERE id='$userid'", $db));
 
     HtmlHead("rideforum", "Ride Forum", $userstatus, $userid);
     echo "<FORM METHOD=POST>";
@@ -110,7 +105,7 @@ switch ($_REQUEST['option']) {
     }
     echo "<tr><td>Date</td><td><INPUT TYPE=TEXT SIZE=24 NAME=\"xdate\"></td></tr>";
     echo "<tr><td>Places</td><td><INPUT TYPE=TEXT SIZE=32 NAME=\"space\"></td></tr>";
-    echo "<tr><td>Notes</td><td><TEXTAREA NAME=notes cols=60 rows=4 MAXLEN=1024 ></textarea></td></tr>";
+    echo "<tr><td>Notes</td><td><TEXTAREA NAME=notes cols=60 rows=4></textarea></td></tr>";
     echo "<tr><TD COLSPAN=2><INPUT TYPE=SUBMIT NAME=option VALUE=save><INPUT TYPE=SUBMIT NAME=option VALUE=cancel></td></tr>";
     echo "</table></form>";
     HtmlTail();

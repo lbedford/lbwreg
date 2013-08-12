@@ -1,22 +1,21 @@
 <?php
 require("basefunc.inc.php");
-/* variables from the environment (GET/POST) */
-extract($_REQUEST, EXTR_SKIP);
 
-session_start();
-if (!array_key_exists("userid", $_SESSION)) {
-  header("Location: login.php");
-  exit();
-}
+CheckLoggedInOrRedirect();
 
-extract($_SESSION);
-
+$userstatus = $_SESSION["userstatus"];
+$userid = $_SESSION["userid"];
+$user = mysql_real_escape_string(trim($_REQUEST["user"]));
+global $date, $xport, $acctype;
 $db = ConnectMysql();
 
-$fields = "firstname, surname, city, country.name as name, arrival, departure, attending, children, travelby, status, kindofaccomodation, nameofaccomodation, logon, email";
-$sql = "SELECT $fields FROM people2,country WHERE (country.id=people2.country) AND (people2.id='$user')";
+$sql = "SELECT firstname, surname, city, country.name as name, " .
+    "arrival, departure, attending, children, travelby, status, " .
+    "kindofaccomodation, nameofaccomodation, logon, email FROM " .
+    "people2,country WHERE (country.id=people2.country) AND " .
+    "(people2.id='$user')";
 if (!$result = mysql_query($sql, $db)) {
-  printf("%s<br>", mysql_error($db));
+  error_log(mysql_error($db));
 }
 $row = mysql_fetch_array($result);
 if (!$row) {
@@ -26,23 +25,53 @@ if (!$row) {
   HtmlTail();
   exit();
 }
-extract($row);
+$firstname = $row["firstname"];
+$surname = $row["surname"];
+$city = $row["city"];
+$name = $row["name"];
+$arrival = $row["arrival"];
+$departure = $row["departure"];
+$attending = $row["attending"];
+$children = $row["children"];
+$travelby = $row["travelby"];
+$status = $row["status"];
+$kindofaccomodation = $row["kindofaccomodation"];
+$nameofaccomodation = $row["nameofaccomodation"];
+$logon = $row["logon"];
+$email = $row["email"];
+
 HtmlHead("userview", $firstname . " " . $surname, $userstatus, $userid);
 
-$sql = "SELECT whois,galpix FROM people2,whois WHERE (people2.id='$user') AND (people2.id=whois.lbwid)";
-if (!$result = mysql_query($sql, $db))
-  printf("%s<br>", mysql_error($db));
+$sql = "SELECT whois,galpix FROM people2,whois WHERE (people2.id='$user') " .
+    "AND (people2.id=whois.lbwid)";
+if (!$result = mysql_query($sql, $db)) {
+  error_log(mysql_error($db));
+}
 $pix = mysql_fetch_array($result);
 
-
 if ($userid == $user || $userstatus > 8) {
-  echo "<table class='reginfo' width=150><tr ><th><A href=useredit.php?user=$user>[Edit this Entry]</a></td></tr></table>\n";
+  echo "<table class='reginfo'>";
+  echo "<tr>";
+  echo "<th>";
+  echo "<A href=useredit.php?user=$user>[Edit this Entry]</a>";
+  echo "</td>";
+  echo "</tr>";
+  echo "</table>\n";
 }
 
-echo "<table class='reginfo'  >\n";
-echo "<tr ><TH COLSPAN=3 ALIGN=CENTER>$firstname $surname</th></tr>\n";
-echo "<tr><td>City</td><td>$city</td>";
-printf("<td width='160' align='center' valign='middle' rowspan='8'>%s</td></tr>\n", ($pix["whois"] > 0) ? "<img src='pictures/" . $pix["galpix"] . "'>" : "<br>No<br>Picture<br>Available<br>");
+echo "<table class='reginfo'>\n";
+echo "<tr>";
+echo "<TH COLSPAN=3>$firstname $surname</th>";
+echo "</tr>\n";
+echo "<tr>";
+echo "<td>City</td>";
+echo "<td>$city</td>";
+$picture = ($pix["whois"] > 0) ?
+    "<img src='pictures/" . $pix["galpix"] . "'>"
+    : "<br>No<br>Picture<br>Available<br>";
+echo "<td rowspan='8'>";
+echo $picture;
+echo "</td></tr>\n";
 echo "<tr><td>Country</td><td>$name</td></tr>\n";
 echo "<tr><td>Arriving</td><td>" . $date[$arrival] . "</td></tr>\n";
 echo "<tr><td>Leaving</td><td>" . $date[$departure] . "</td></tr>\n";

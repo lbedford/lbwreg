@@ -53,7 +53,7 @@ if (crypt($old_password, $row["password"]) == $row["password"]) {
 
   echo "<h4>";
   echo "Your login password  has been updated.\n";
-  echo "<li><A HREF='$regpath/welcome.php'> Go to the welcome page</a></li></ul>";
+  echo "<li><A HREF='" . $regpath . "/welcome.php'> Go to the welcome page</a></li></ul>";
   echo "";
 } else {
   echo "<h2>Login rejected<br>";

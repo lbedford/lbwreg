@@ -9,7 +9,6 @@ class Template
       list($pagename, $caption, $passlevel) = $menuitem;
       $show = (($passlevel < 8) || ($status > 8));
       $link = ((($status >= $passlevel)) && ($pagename != $page));
-      error_log("$link because $pagename $page $status $passlevel");
       if ($show) {
         if ($first) {
           $first = false;

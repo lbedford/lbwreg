@@ -22,7 +22,18 @@ for ($i = 0; $i <= $duration + 1; $i++) {
 
 # ----------------------------------------------------------------------
 
-function HtmlHead($page, $title, $status, $javascript = '')
+function CheckLoggedInOrRedirect()
+{
+  $_SESSION["userid"] = 0;
+  session_start();
+  if (!$_SESSION["userid"]) {
+    header("Location: login.php");
+    exit();
+  }
+}
+
+function HtmlHead($page, $title, $status, /** @noinspection PhpUnusedParameterInspection */
+                  $userid, $javascript = '')
 {
   echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
   echo "<html>\n";
@@ -35,14 +46,14 @@ function HtmlHead($page, $title, $status, $javascript = '')
   echo "</head>\n";
   echo "<body class='protected'>\n";
   echo "  <div class='content' >\n";
-  echo "    <table border='0' cellpadding='0' width='100%'>\n";
+  echo "    <table border='0'>\n";
   include("html/header.html");
   echo "      <tr>\n";
-  echo "        <td class='leftcolumn strut' valign='top'>\n";
+  echo "        <td class='leftcolumn strut'>\n";
   echo "          <br />\n";
   echo "          " . htmlspecialchars($title);
   echo "        </td>\n";
-  echo "        <td valign='top' class='centercolumn'>\n";
+  echo "        <td class='centercolumn'>\n";
 
   echo "          <div class='subnavbar'  style=\"text-align: center;\">\n";
   global $menu, $admin_menu;
@@ -64,12 +75,12 @@ function HtmlTail()
 {
   global $teammail;
   ?>
-  <table class='footer' width='100%'>
-    <tr valign='bottom'>
+  <table class='footer'>
+    <tr>
       <td class='leftnote'></td>
       <td class='rightnote'> &nbsp;&nbsp; </td>
     </tr>
-    <tr valign="bottom">
+    <tr>
       <td class="leftnote">
       </td>
       <td class="rightnote">
@@ -80,7 +91,7 @@ function HtmlTail()
       </td>
     </tr>
   </table>
-  </center></td></tr></table>
+  </td></tr></table>
   </div>
   <!-- Piwik -->
   <script type="text/javascript">var _paq = _paq || [];
@@ -207,7 +218,7 @@ function getForumOwnerName($forum)
 function getNameOfEvent($event)
 {
   global $db;
-  $query = "SELECT name FROM Events WHERE id = $event";
+  $query = "SELECT name FROM Events WHERE id = '$event'";
   $resp = mysql_query($query, $db);
   if (!$resp) {
     printf("<br />$query: %s<br />", mysql_error($db));
@@ -221,7 +232,7 @@ function getNameOfEvent($event)
 function getUsername($user)
 {
   global $db;
-  $query = "SELECT firstname, surname FROM people2 WHERE id = $user";
+  $query = "SELECT firstname, surname FROM people2 WHERE id = '$user'";
   $resp = mysql_query($query, $db);
   if (!$resp) {
     printf("<br />$query: %s<br />", mysql_error($db));
@@ -254,13 +265,21 @@ function getListOfUsersForEvent($event)
 function getDescriptionOfEvent($event)
 {
   global $db;
-  $query = "SELECT description FROM Events WHERE id = $event";
+  $query = "SELECT description FROM Events WHERE id = '$event'";
   $resp = mysql_query($query, $db);
   if (!$resp) {
     return "";
   }
   $myrow = mysql_fetch_array($resp);
   return $myrow["description"];
+}
+
+function GetEntryFromRequest($entry, $default)
+{
+  if (array_key_exists($entry, $_REQUEST)) {
+    return mysql_real_escape_string(trim($_REQUEST[$entry]));
+  }
+  return $default;
 }
 
 ;

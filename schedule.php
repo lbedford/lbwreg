@@ -36,7 +36,7 @@ function CalculatePotentialAttendees($db, $event_id)
 
 function CalculateRegistered($db, $event_id)
 {
-  $query = "SELECT COUNT(geek) FROM eventreg WHERE event=$event_id";
+  $query = "SELECT COUNT(geek) FROM eventreg WHERE event='$event_id'";
   return RunMysqlQuery($db, $query);
 }
 
@@ -183,16 +183,16 @@ for ($day = 1; $day < count($date) - 2; $day++) {
   $dep = CalculateDepartures($db, $day);
   $att = CalculateAttendees($db, $day);
 
-  echo "<table class='reginfo' width=100% ><tr ><th colspan=4>" .
+  echo "<table class='schedule'><tr ><th colspan=4>" .
       $weekday[$day] . " " . $date[$day] . " ($arr arrival";
   if ($arr != 1) echo "s";
   echo "; $dep departure";
   if ($dep != 1) echo "s";
   echo "; $att attendees)</th></tr>\n";
-  echo "<tr ><th width=10%>Time</th>\n";
-  echo "<th width=30%>Short events</th>\n";
-  echo "<th width=30%>Half day events</th>\n";
-  echo "<th width=30%>Day long events</th></tr>";
+  echo "<tr><th class='schedule_time'>Time</th>\n";
+  echo "<th>Short events</th>\n";
+  echo "<th>Half day events</th>\n";
+  echo "<th>Day long events</th></tr>";
 
   for ($evnum = 0; $evnum < 48; $evnum++) {
     $e1 = $evid[$sched[$evnum]];

@@ -11,12 +11,8 @@ if (array_key_exists("showall", $_REQUEST)) {
   $showall = $_REQUEST["showall"];
 }
 
-session_start();
+CheckLoggedInOrRedirect();
 
-if (!array_key_exists("userid", $_SESSION)) {
-  header("Location: login.php");
-  exit();
-}
 if ($_SESSION["userstatus"] < 8) {
   header("Location: " . getenv("HTTP_REFERER"));
 }
@@ -31,14 +27,14 @@ if (($sort == "id") || ($sort == "logons") || ($sort == "laston")) {
   $sort = "$sort DESC";
 }
 $where = "where (country.id = country) ";
-$result = mysql_query("SELECT people2.id AS id,firstname,surname,email,city,country,status,name,attending,children,arrival,departure,logons,laston FROM people2, country $where ORDER BY $sort", $db);
+$result = mysql_query("SELECT people2.id AS id,firstname,surname,email,city,country,status,name,attending,children,arrival,departure,logons,laston FROM people2, country $where ORDER BY " . $sort, $db);
 $users = 0;
 $link = "";
 if (!$result) {
   printf("<br />%s<br />", mysql_error($db));
 } else {
   if ($showall == "false") {
-    $link = "<a href=\"?showall=true&sort=$sort\">(Show All)</a>";
+    $link = "<a href='?showall=true&sort=$sort'>(Show All)</a>";
     while ($row = mysql_fetch_array($result)) {
       if ($row["logons"] > 0) {
         $users++;
@@ -52,16 +48,16 @@ if (!$result) {
 }
 echo "Page loaded: " . date("H:i:s d-m-y", time()) . "<br />";
 ?>
-<table class='reginfo' width='100%'>
+<table class='reginfo'>
   <tr>
-    <th><a href="?sort=id&showall=<? echo $showall ?>">id</a></th>
-    <th><a href="?sort=firstname&showall=<? echo $showall ?>">name</a>,<br/>
+    <th class='users_id'><a href="?sort=id&showall=<? echo $showall ?>">id</a></th>
+    <th class='users_name'><a href="?sort=firstname&showall=<? echo $showall ?>">name</a>,<br/>
       <a href="?sort=surname&showall=<? echo $showall ?>">surname</a></th>
-    <?
+    <?php
     if ($_SESSION["userstatus"] >= 8) {
       ?>
       <th><a href="?sort=email&showall=<? echo $showall ?>">email</a></th>
-    <?
+    <?php
     }
     ?>
     <th><a href="?sort=city&showall=<? echo $showall ?>">city</a>,<br/>
@@ -76,6 +72,7 @@ echo "Page loaded: " . date("H:i:s d-m-y", time()) . "<br />";
   <?php
   global $date;
   while ($row = mysql_fetch_array($result)) {
+    $id = $row['id'];
     $firstname = $row['firstname'];
     $surname = $row['surname'];
     $email = $row['email'];

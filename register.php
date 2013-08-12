@@ -23,31 +23,30 @@ function finddups($db, $logon, $firstname, $surname, $email)
   global $teammail, $year, $eventhost;
   echo "<h2>You appear to be registered already</h2>";
   echo "<br><hr><br>If you have forgotten your password please email <a href=mailto:$teammail>The Team</a><br><hr><br>\n";
-  echo "<A href=login.php>[LOGIN]</a>or <A href='$eventhost'>[LBW$year Main Site]</a>";
+  echo "<A href=login.php>[LOGIN]</a>or <A href='" . $eventhost . "'>[LBW$year Main Site]</a>";
   exit();
 }
 
 $db = ConnectMysql();
 
-extract($_REQUEST, EXTR_SKIP);
 
 if (isset($submit)) {
   switch ($submit) {
     case "Register":
-      $firstname = mysql_real_escape_string(trim($firstname));
-      $surname = mysql_real_escape_string(trim($surname));
-      $logon = mysql_real_escape_string(trim($logon));
-      $password = mysql_real_escape_string($password);
-      $email = mysql_real_escape_string(trim($email));
-      $city = mysql_real_escape_string(trim($city));
-      $country = mysql_real_escape_string($country);
-      $noadults = mysql_real_escape_string($noadults);
-      $nochildren = mysql_real_escape_string($nochildren);
-      $arrival = mysql_real_escape_string($arrival);
-      $departure = mysql_real_escape_string($departure);
-      $travelby = mysql_real_escape_string($travelby);
-      $accomodation = mysql_real_escape_string($accomodation);
-      $accname = mysql_real_escape_string(trim($accname));
+      $firstname = GetEntryFromRequest('firstname', 'Reto');
+      $surname = GetEntryFromRequest('surname', 'Schmidt');
+      $logon = GetEntryFromRequest('logon', 'null');
+      $password = GetEntryFromRequest('password', 'null');
+      $email = GetEntryFromRequest('email', 'null');
+      $city = GetEntryFromRequest('city', 'null');
+      $country = GetEntryFromRequest('country', 'null');
+      $noadults = intval(GetEntryFromRequest('noadults', '0'));
+      $nochildren = intval(GetEntryFromRequest('nochildren', '0'));
+      $arrival = GetEntryFromRequest('arrival', 'null');
+      $departure = GetEntryFromRequest('departure', 'null');
+      $travelby = GetEntryFromRequest('travelby', 'null');
+      $accomodation = GetEntryFromRequest('accomodation', 'null');
+      $accname = GetEntryFromRequest('accname', 'null');
 
       $err = 0;
       $error = "";
@@ -120,7 +119,7 @@ if (isset($submit)) {
         echo "<h1>Thank you for Registering</h1><br><hr><br>";
         echo "You now have access to none of the registration site.<br>";
         echo "Full access should be enabled by the end of the day.<br>";
-        echo "<a href='$eventhost'>Continue</a>";
+        echo "<a href='" . $eventhost . "'>Continue</a>";
         HtmlTail();
         mail($teammail, "New LBW $year registration",
             "New registration:\n\n" .

@@ -82,7 +82,7 @@ if (mail($email, "Your login details", $message, "From: $teammail")) {
   echo "You should receive it shortly.<br></h4><hr>\n";
   echo "";
   echo "<ul>\n<li><A HREF='login.php'>Return to login page while waiting</a></li>";
-  echo "<li><A HREF='$eventhost'> Go to the event main page</a></li></ul>";
+  echo "<li><A HREF='" . $eventhost . "'> Go to the event main page</a></li></ul>";
   echo "";
 } else {
   echo "mail problem<br>";

@@ -3,20 +3,14 @@ require("basefunc.inc.php");
 
 $db = ConnectMysql();
 
-extract($_REQUEST, EXTR_SKIP);
 
-session_start();
+CheckLoggedInOrRedirect();
 
-extract($_SESSION);
+$userid = $_SESSION["userid"];
+$userstatus = $_SESSION["userstatus"];
+$user = $_REQUEST["user"];
 
-if (!$userid) {
-  header("Location: login.php");
-  exit();
-}
-
-if (!isset($user)) {
-  $user = $userid;
-}
+global $date, $xport, $acctype, $accorder;
 
 if (!($userid == $user || $userstatus == 16)) {
   HtmlHead("useredit", "Illegal Action", "", "");
@@ -33,12 +27,12 @@ if (!isset($LBWID)) {
   HtmlHead("useredit", "User Information", $userstatus, $user);
 
   printf("\n<FORM METHOD=POST><INPUT TYPE=HIDDEN NAME=LBWID VALUE=$user>\n");
-  printf("<table class='reginfo' CELLPADDING=2>\n");
-  printf("<tr><td>Login     </td><td><INPUT TYPE=TEXT name=logon VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["logon"]));
-  printf("<tr><td>First Name</td><td> <INPUT TYPE=TEXT name=firstname VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["firstname"]));
-  printf("<tr><td>Surname</td><td><INPUT TYPE=TEXT name=surname VALUE = \"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["surname"]));
-  printf("<tr><td>Email</td><td><INPUT TYPE=TEXT name=email VALUE= \"%s\" SIZE=35 MAXLEN=60></td></tr>\n", htmlspecialchars($row["email"]));
-  printf("<tr><td>City</td><td><INPUT TYPE=TEXT name=city VALUE=\"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["city"]));
+  printf("<table class='reginfo'>\n");
+  printf("<tr><td>Login     </td><td><INPUT TYPE=TEXT name=logon VALUE = \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["logon"]));
+  printf("<tr><td>First Name</td><td> <INPUT TYPE=TEXT name=firstname VALUE = \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["firstname"]));
+  printf("<tr><td>Surname</td><td><INPUT TYPE=TEXT name=surname VALUE = \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["surname"]));
+  printf("<tr><td>Email</td><td><INPUT TYPE=TEXT name=email VALUE= \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["email"]));
+  printf("<tr><td>City</td><td><INPUT TYPE=TEXT name=city VALUE=\"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["city"]));
   printf("<tr><td>Country</td><td><SELECT name=country>");
   $sql = "SELECT * FROM country ORDER BY name";
   $rx = mysql_query($sql, $db);
@@ -49,9 +43,7 @@ if (!isset($LBWID)) {
   }
   printf("</select></td></tr>\n");
 
-  //printf("<tr><td>Number of adults including yourself<br>(0 if you can not come)</td><td><INPUT TYPE=TEXT name = adults VALUE=\"%s\" SIZE=4 MAXLEN=4></td></tr>\n", $row["adults"]);
-
-  printf("<tr><td>number of children</td><td><INPUT TYPE=TEXT name = children VALUE=\"%s\" SIZE=4 MAXLEN=4></td></tr>\n", $row["children"]);
+  printf("<tr><td>number of children</td><td><INPUT TYPE=TEXT name = children VALUE=\"%s\" SIZE=4></td></tr>\n", $row["children"]);
   printf("<tr><td>Arrival</td><td><SELECT name = arrival>");
   for ($i = 0; $i < count($date) - 1; $i++) {
     $sel = ($row["arrival"] == $i && !is_null($row["arrival"])) ?
@@ -86,60 +78,38 @@ if (!isset($LBWID)) {
   }
   printf("</select></td></tr>\n");
 
-  printf("<tr><td>Name of Accomodation<br>if known</td><td><INPUT TYPE=TEXT name = nameofaccomodation VALUE=\"%s\" SIZE=35 MAXLEN=40></td></tr>\n", htmlspecialchars($row["nameofaccomodation"]));
+  printf("<tr><td>Name of Accomodation<br>if known</td><td><INPUT TYPE=TEXT name = nameofaccomodation VALUE=\"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["nameofaccomodation"]));
 
   printf("<tr><td>Attending?</td><td><INPUT TYPE=CHECKBOX name=attending VALUE=\"1\" %s></td></tr>\n", $row["attending"] == 1 ? "checked=checked" : "");
 
-  printf("<tr><TD  ALIGN=LEFT><INPUT TYPE=SUBMIT NAME=submit VALUE=SAVE></td><TD ALIGN=RIGHT><INPUT TYPE=SUBMIT NAME=submit VALUE=CANCEL></td></tr>\n");
-  printf("</table>\n</form>\n");
+  echo "<tr>";
+  echo "<TD>";
+  echo "<INPUT TYPE=SUBMIT NAME=submit VALUE=SAVE>";
+  echo "</td>";
+  echo "<TD>";
+  echo "<INPUT TYPE=SUBMIT NAME=submit VALUE=CANCEL>";
+  echo "</td>";
+  echo "</tr>\n";
+  echo "</table>\n";
+  echo "</form>\n";
   HtmlTail();
   exit();
 } else {
   $LBWID = mysql_real_escape_string(trim($LBWID));
-  if (isset($submit)) {
-    $submit = mysql_real_escape_string(trim($submit));
-  }
-  if (isset($logon)) {
-    $logon = mysql_real_escape_string(trim($logon));
-  }
-  if (isset($firstname)) {
-    $firstname = mysql_real_escape_string(trim($firstname));
-  }
-  if (isset($surname)) {
-    $surname = mysql_real_escape_string(trim($surname));
-  }
-  if (isset($email)) {
-    $email = mysql_real_escape_string(trim($email));
-  }
-  if (isset($city)) {
-    $city = mysql_real_escape_string(trim($city));
-  }
-  if (isset($country)) {
-    $country = mysql_real_escape_string(trim($country));
-  }
-  if (isset($attending)) {
-    $attending = 1;
-  } else {
-    $attending = 0;
-  }
-  if (isset($children)) {
-    $children = mysql_real_escape_string(trim($children));
-  }
-  if (isset($arrival)) {
-    $arrival = mysql_real_escape_string(trim($arrival));
-  }
-  if (isset($departure)) {
-    $departure = mysql_real_escape_string(trim($departure));
-  }
-  if (isset($travelby)) {
-    $travelby = mysql_real_escape_string(trim($travelby));
-  }
-  if (isset($kindofaccomodation)) {
-    $kindofaccomodation = mysql_real_escape_string(trim($kindofaccomodation));
-  }
-  if (isset($nameofaccomodation)) {
-    $nameofaccomodation = mysql_real_escape_string(trim($nameofaccomodation));
-  }
+  $submit = GetEntryFromRequest('submit', 'CANCEL');
+  $logon = GetEntryFromRequest('logon', '');
+  $firstname = GetEntryFromRequest('firstname', 'Reto');
+  $surname = GetEntryFromRequest('surname', 'Schmidt');
+  $email = GetEntryFromRequest('email', 'nobody@local.xxx');
+  $city = GetEntryFromRequest('city', 'Accra');
+  $country = GetEntryFromRequest('country', 1);
+  $attending = intval(GetEntryFromRequest('attending', 0));
+  $children = intval(GetEntryFromRequest('children', 0));
+  $arrival = GetEntryFromRequest('arrival', 'null');
+  $departure = GetEntryFromRequest('departure', 'null');
+  $travelby = GetEntryFromRequest('travelby', 'null');
+  $kindofaccomodation = GetEntryFromRequest('kindofaccomodation', 'null');
+  $nameofaccomodation = GetEntryFromRequest('nameofaccomodation', 'null');
   if ($submit == 'CANCEL') {
     header("Location: welcome.php");
     exit();
@@ -151,19 +121,20 @@ if (!isset($LBWID)) {
     HtmlTail();
   }
   $err = 0;
+  $error = Array();
   if (($departure < $arrival) && ($departure != "NULL") && ($arrival != "NULL")) {
     $err++;
     $error[$err] = "You can not leave before you arrive";
   }
   //more error checking
-  $result = mysql_query("SELECT logon FROM people2 WHERE id=$LBWID", $db);
+  $result = mysql_query("SELECT logon FROM people2 WHERE id='$LBWID'", $db);
   $row = mysql_fetch_array($result);
   if ($row["logon"] != $logon) {
     if (strlen($logon) < 4) {
       echo "login must be at least 4 letters<br>\n";
       $err++;
     }
-    $result = mysql_query("SELECT id,logon FROM people2 WHERE (logon LIKE '$logon') AND (id != $LBWID)", $db);
+    $result = mysql_query("SELECT id,logon FROM people2 WHERE (logon LIKE '$logon') AND (id != '$LBWID')", $db);
     if (!$result) {
       echo mysql_error($db) . "<br>\n";
       exit();

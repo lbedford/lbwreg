@@ -1,3 +1,348 @@
+body {
+    background: #FFFFFF url(images/hiking_tux_paper.gif);
+    font-family: Palatino, Georgia, "Times New Roman", Times, serif;
+    font-size: 10.5pt;
+    max-width: 150ex;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+h1 {
+    font-size: 1.31em;
+    margin: .69em;
+    font-weight: bold;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.20em;
+    margin: .80em;
+    font-weight: bold;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.09em;
+    margin: .90em;
+    font-weight: bold;
+    text-align: center;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.0em;
+    font-weight: bold;
+}
+
+h5 {
+    font-size: .91em;
+    margin: 1.09em;
+    font-weight: bold;
+    line-height: 1.17em;
+}
+
+h6 {
+    font-size: .83em;
+    margin: 1.17em;
+    font-weight: bold;
+}
+
+.navbar {
+    border-top: solid black 1px;
+    border-bottom: solid black 1px;
+    text-align: center;
+    font-family: Verdana, Optima, Helvetica, sans-serif;
+    font-size: 8pt;
+    width: 100%;
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.title {
+    text-align: center;
+}
+
+.footer, .update {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: right;
+}
+
+table.table {
+    border: 0;
+    border-top: double black;
+    border-bottom: double black;
+}
+
+.table tr {
+    border: 0;
+}
+
+.table th {
+    border: 0;
+    border-bottom: solid black 1px;
+    border-left: gray solid 1px;
+    border-right: gray solid 1px;
+    padding: 1px 5px;
+}
+
+.table td {
+    border: 0;
+    border-left: gray solid 1px;
+    border-right: gray solid 1px;
+    padding: 1px 5px;
+}
+
+.dateline {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: right;
+}
+
+.docinfo-name {
+    text-align: left;
+}
+
+.content {
+    background-color: white;
+    margin: 1ex;
+    border: gray solid 1px;
+    border-right: black groove 2px;
+    border-bottom: black groove 2px;
+}
+
+div.content {
+    width: auto;
+}
+
+.leftcolumn {
+    padding: 1.5ex 1.5ex 0 1.5ex;
+    width: 1px;
+    font-family: Verdana, Optima, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 9pt;
+    vertical-align: top;
+}
+
+.protected .leftcolumn {
+}
+
+.leftcolumn img {
+    margin: 0;
+}
+
+.centercolumn {
+    padding: 0 1ex 0 1ex;
+}
+
+.strut {
+    height: 400px;
+}
+
+.thumbleft {
+    border: solid black 3px;
+    margin: 0 1ex 1ex 0;
+}
+
+.thumbright {
+    border: solid black 3px;
+    margin: 0 1ex 1ex 1ex;
+}
+
+img.medium {
+    border: solid black 3px;
+    margin: 2ex;
+    text-align: center;
+}
+
+.quote {
+    padding: 1ex;
+    background-color: #DDF;
+    font-style: italic;
+    margin: 1ex 4ex 1ex 1ex;
+}
+
+.extract {
+    margin: 1ex;
+}
+
+.writer {
+    font-weight: bold;
+}
+
+.signed {
+    font-style: italic;
+    font-size: 110%;
+    text-align: right;
+    margin-right: 10ex;
+}
+
+.pre {
+    font-family: monospace;
+    font-size: 9pt;
+    white-space: pre;
+}
+
+.item {
+    display: list-item;
+    list-style-type: disc;
+    margin-left: 4ex;
+    margin-top: 2ex;
+}
+
+.item .item {
+    display: list-item;
+    list-style-type: circle;
+    margin-left: 4ex;
+    margin-top: 0;
+}
+
+.more {
+    display: list-item;
+    list-style-type: none;
+    margin-left: 4ex;
+    font-style: italic;
+}
+
+.picture {
+    font-style: italic;
+    text-align: center;
+    width: 100%;
+}
+
+.sponsorfoot {
+    padding: 3ex 0 1ex 104px;
+}
+
+.sponsorlogo {
+    padding: 0 2ex 0 2ex;
+}
+
+/*table.schedule {*/
+/*border: 0;*/
+/*border-top: double black;*/
+/*border-bottom: double black*/
+/*}*/
+
+/* Schedule table */
+table.schedule {
+    width: 95%;
+    border-spacing: 1px;
+    border: outset black;
+    border-collapse: separate;
+}
+
+tr.schedule {
+    border: 0;
+}
+
+th.schedule {
+    border: 0;
+    border-bottom: solid black 1px;
+    border-left: gray solid 1px;
+    border-right: gray solid 1px;
+    /*border: none black 0;*/
+    background-color: #DDD;
+}
+
+td.schedule {
+    border: 0;
+    border-left: gray solid 1px;
+    border-right: gray solid 1px;
+    /*border: none black 0;*/
+    background-color: #EEE;
+}
+
+th.schedule_time {
+    width: 10%;
+}
+
+th.users_id {
+    width: 5%;
+}
+
+th.users_name {
+    width: 20%;
+}
+
+/* Events tables */
+table.events {
+    width: 100%;
+    border-spacing: 1px;
+    border-collapse: separate;
+    margin: 0 auto 0 auto;
+    border: outset gray 1px;
+}
+
+/* Applies to the cells after schedule */
+.events th {
+    background-color: #DDD;
+}
+
+.events td {
+    background-color: #EEE;
+}
+
+.event_name {
+    width: 30%;
+    text-align: left;
+}
+
+.event_messages {
+    width: 5%;
+    text-align: center;
+}
+
+.event_subs {
+    width: 5%;
+    text-align: center;
+}
+
+.event_schedule {
+    width: 30%;
+    text-align: right;
+}
+
+/* Footer elements: */
+.footer {
+    padding: 5px;
+    border: 0;
+}
+
+.update {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: right;
+}
+
+.rightnote {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: right;
+}
+
+.leftnote {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: left;
+}
+
+table.reginfo {
+    width: 95%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+th.subject {
+    width: 40%;
+}
+
+th.from {
+    width: 35%;
+}
+
 hr {
     width: 90%;
 }
@@ -13,6 +358,7 @@ hr {
     font-style: italic;
     background-color: #44A;
     color: #FFF;
+    vertical-align: top;
 }
 
 .subnavbar a {
@@ -40,6 +386,22 @@ hr {
 
 .centercolumn {
     text-align: center;
+    width: 100%;
+}
+
+.schedule {
+    margin: 0 auto 0 auto;
+    border: outset gray 1px;
+}
+
+.schedule td {
+    border: none black 0;
+    background-color: #EEE;
+}
+
+.schedule th {
+    border: none black 0;
+    background-color: #DDD;
 }
 
 .reginfo {

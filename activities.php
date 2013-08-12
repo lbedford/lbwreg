@@ -43,7 +43,8 @@ switch ($option) {
       $fid = $_REQUEST["fid$r"];
       $evday = $_REQUEST["event${fid}day"];
       $evhour = $_REQUEST["event${fid}hour"];
-      $sql = "UPDATE Events SET day=$evday, hour=$evhour, type=$type, tslot=1 WHERE id=$fid";
+      $sql = "UPDATE Events SET day='$evday', hour='$evhour'," .
+          "type='$type', tslot='1' WHERE id='$fid'";
       $result = mysql_query($sql, $db);
       if (!$result)
         echo mysql_error($db);
@@ -58,15 +59,15 @@ switch ($option) {
     echo "";
 
     for ($type = 1; $type <= 4; $type++) {
-      echo "<table class='reginfo' CELLPADDING=1 WIDTH=95%>\n";
+      echo "<table class='events'>\n";
       echo "<tr >";
-      echo "<td colspan='5' align='center'><b>$forumstr[$type]</b></td>";
+      echo "<td colspan='5'><b>$forumstr[$type]</b></td>";
       echo "</tr>\n";
-      echo "<tr ><th width='30%' align='center'>$namestr[$type]</th>\n";
-      echo "<th width='20%'>$honchostr[$type]</th>\n";
-      echo "<th width='5%'>Subs.</th>\n";
-      echo "<th width='5%'>Msg.</th>\n";
-      echo "<th width='30%'>Schedule</th></tr>\n";
+      echo "<tr ><th class='event_name'>$namestr[$type]</th>\n";
+      echo "<th class='event_organiser'>$honchostr[$type]</th>\n";
+      echo "<th class='event_subs'>Subs.</th>\n";
+      echo "<th class='event_messages'>Msg.</th>\n";
+      echo "<th class='event_schedule'>Schedule</th></tr>\n";
       if (($_SESSION["userstatus"] == 16) && ($type > 1)) {
         echo "<form method=post>";
       }
@@ -104,7 +105,7 @@ switch ($option) {
             if (is_null($myrow["day"])) {
               $sel = "selected";
             }
-            $sched .= "<option value=null $sel>Unset</option>\n";
+            $sched .= "<option value=null " . $sel . ">Unset</option>\n";
             $sched .= "</select>\n";
             $sched .= "<select name=event" . $myrow["fid"] . "hour>";
             for ($evhour = 0; $evhour < 24; $evhour++) {
@@ -121,13 +122,23 @@ switch ($option) {
             $myrow["hour"], $myrow["forum_duration"]);
         }
 
-        printf("<tr ><td $bgc$bgc1><a href=forum.php?forum=%d>%s</a></td><td $bgc><a href='userview.php?user=%d'>%s %s</a></td><td align='center' $bgc>%s</td><td align='center' $bgc> %s</td><td align='right' $bgc>%s</td></tr>\n",
-          $myrow["fid"], stripslashes($myrow["name"]), $myrow["owner"], $myrow["firstname"], $myrow["surname"], $punters, $myrow["messages"], $sched);
+        echo "<tr >";
+        echo "<td class='event_name' " . $bgc . $bgc1 . ".>";
+        echo "<a href=forum.php?forum=" . $myrow["fid"] . ">" .
+            stripslashes($myrow["name"]) . "</a>";
+        echo "</td>";
+        echo "<td class='event_owner' " . $bgc . ">";
+        echo "<a href='userview.php?user=" . $myrow["owner"] . "'>" .
+            $myrow["firstname"] . " " . $myrow["surname"] . "</a>";
+        echo "</td>";
+        echo "<td align='center' class='event_subs' " . $bgc . ">" . $punters . "</td>";
+        echo "<td align='center' class='event_messages' " . $bgc . ">" . $myrow["messages"] . "</td>";
+        echo "<td class='event_schedule' " . $bgc . ">" . $sched . "</td></tr>\n";
       }
       if (($_SESSION["userstatus"] > 2) && ($type < 5)) {
         if (($_SESSION["userstatus"] == 16) && ($type > 1))
-          echo "<tr ><td colspan=4>&nbsp;</td><td align='center'><input type=hidden name=type value=$type><input type=hidden name=rows value=$row><INPUT TYPE=SUBMIT NAME=option VALUE=Update></form></td></tr>\n";
-        echo "<tr ><td colspan='5' align='center' valign='center'><form action='propose.php' method='get'><h2><INPUT TYPE=HIDDEN NAME=type VALUE=$type><input type=submit value=\" Offer to $propstr[$type]\"></h2></form></td></tr>\n";
+          echo "<tr ><td colspan=4>&nbsp;</td><td><input type=hidden name=type value=$type><input type=hidden name=rows value=$row><INPUT TYPE=SUBMIT NAME=option VALUE=Update></form></td></tr>\n";
+        echo "<tr ><td colspan='5'><form action='propose.php' method='get'><h2><INPUT TYPE=HIDDEN NAME=type VALUE=$type><input type=submit value=\" Offer to $propstr[$type]\"></h2></form></td></tr>\n";
       } else
         echo "<tr ><TD colspan=5>&nbsp;</td></tr>";
       echo "</table>\n";

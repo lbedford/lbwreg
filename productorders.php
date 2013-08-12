@@ -27,14 +27,14 @@ mysql_free_result($result);
 $cols = count($Sizes) + 2;
 echo "<table class='reginfo'  >";
 echo "<tr><th colspan='$cols'>Aggregated T-shirts Orders by style & size for " . $punters . " buyers<br></th></tr>\n";
-echo "<tr><TH width=60>Style</th>";
+echo "<tr><TH>Style</th>";
 $quantity = array();
 $quantity_size = array();
 foreach ($Sizes as $i => $size) {
-  echo "<TH width=60>$size</th>";
+  echo "<TH>$size</th>";
   $quantity_size[$i] = 0;
 }
-echo "<TH width=50>Totals</th></tr>\n";
+echo "<TH>Totals</th></tr>\n";
 foreach ($Products as $index => $Product) {
   foreach ($Sizes as $i => $size) {
     $quantity[$i] = 0;
@@ -59,7 +59,7 @@ foreach ($Sizes as $i => $size) {
   echo "<TD align=right>" . $quantity_size[$i] . "</td>";
   $quantity_total_size += $quantity_size[$i];
 }
-echo "<TD align=right>$quantity_total_size</td></tr>\n</table>\n<br>\n";
+echo "<TD>$quantity_total_size</td></tr>\n</table>\n<br>\n";
 echo "<br>";
 
 // list all orders by person;

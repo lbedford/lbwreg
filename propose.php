@@ -99,10 +99,10 @@ switch ($option) {
     echo "<FORM METHOD=POST>\n";
     echo "<INPUT TYPE=HIDDEN NAME=type VALUE=$type>\n";
     echo "$shortname<br>";
-    echo "<INPUT TYPE=TEXT NAME=\"heading\" VALUE=\"$shorttext\"  SIZE=50 MAXLEN=50><br>";
+    echo "<INPUT TYPE=TEXT NAME=\"heading\" VALUE=\"$shorttext\"  SIZE=50><br>";
     if ($type > 1) {
       echo "Short name (for schedule diary entry)<br>";
-      echo "<INPUT TYPE=TEXT NAME=\"schedtxt\" VALUE=\"\"  SIZE=12 MAXLEN=12><br>";
+      echo "<INPUT TYPE=TEXT NAME=\"schedtxt\" VALUE=\"\"  SIZE=12><br>";
     }
     echo "Details (Use HTML in this field) <br>\n";
     echo "<TEXTAREA NAME=description COLS=60 ROWS=10>\n";
@@ -118,7 +118,7 @@ switch ($option) {
         echo "<select name=\"forum_duration\">";
         for ($i = 1; $i <= $eventmaxhours[$type]; $i++) {
           $s = ($i == 3) ? "selected" : "";
-          echo "<option value='$i' $s> $i";
+          echo "<option value='$i' " . $s . "> $i";
         }
         printf("</select> hours duration<br>\n");
         break;
@@ -127,7 +127,7 @@ switch ($option) {
         printf("The Event will be about <select name='forum_duration' >");
         for ($i = 1; $i <= $eventmaxhours[$type]; $i++) {
           $s = ($i == 3) ? "selected" : "";
-          echo "<option value='$i' $s> $i";
+          echo "<option value='$i' " . $s . "> $i";
         }
         printf("</select> hours long<br>\n");
         break;
@@ -136,7 +136,7 @@ switch ($option) {
         printf("The Event will be about <SELECT NAME=forum_duration>");
         for ($i = 1; $i <= $eventmaxhours[$type]; $i++) {
           $s = ($i == 3) ? "selected" : "";
-          echo "<option value='$i' $s> $i";
+          echo "<option value='$i' " . $s . "> $i";
         }
         printf("</select> hours long<br>\n");
         break;
