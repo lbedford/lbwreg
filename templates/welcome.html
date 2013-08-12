@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+
+    <title>LBW {{ year }} in {{location}}</title>
+
+    <script language="javascript1.1" src="/js/hide.js" type="text/javascript"></script>
+    <script language="javascript1.1" src="/js/updated.js" type="text/javascript"></script>
+
+    <link rel="shortcut icon" href="/images/wandertux.ico"/>
+    <link rel="stylesheet" href="/reg.css" type="text/css"/>
+    <script type='text/javascript' src='http://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+        google.load('visualization', '1', {'packages': ['intensitymap']});
+    </script>
+</head>
+<body class='protected'>
+
+<div class='content'>
+<div class='logo'>
+    <a href="welcome.php">
+        <img
+                src="../images/hiking_tux-116x149.jpg"
+                alt="Hiking Tux"
+                border="0"
+                width="116"
+                height="149"
+                />
+    </a>
+</div>
+<div class='header'>
+    <a href="{{eventhost}}">
+        <h1>LBW {{year}}</h1>
+    </a>
+
+    <h1>{{location}}<br/>
+        {{start_date}} - {{end_date}}</h1>
+    <br/>
+    LBW {{year}} welcomes {{name}}
+    {% include 'navbar.html' %}
+    {% if admin %}
+    {% include 'adminbar.html' %}
+    {% endif %}
+</div>
+<div class="body">
+    Welcome to the LBW {{year}} registration system.<br>
+    <br/>
+    Time
+    {% if lbw_started %}
+    since the LBW started:
+    {% else %}
+    until the LBW starts:
+    {% endif %}
+    {{time_to_since_lbw}}
+    <br/>
+    {% if lbw_started %}
+    There are {{present_adults}} adults and {{present_children}} children from {{present_countries}} countries
+    present.<br/>
+    {% endif %}
+    There are {{potential_registrations}} registrations, totalling {{potential_adults}} adults and
+    {{potential_children}} children from {{potential_countries}} countries, who really know where their towels are.<br>
+    {% if indecisive_adults > 0 %}
+    There are {{indecisive_registrations}} registrations, totalling {{indecisive_adults}} adults and
+    {{indecisive_children}} children from {{indecisive_countries}} countries, who are not sure if they're coming or
+    going.<br>
+    {% endif %}
+    <hr/>
+    <br/>
+    <b>Welcome, {{firstname}}!</b>
+    <br/>
+    <br/>
+    {% if attending %}
+    <span style='font-weight: bold;'>You are expected here from {{arrival_date}} until {{departure_date}}.</span>
+    <br/>
+    If this is incorrect please <a href='useredit.php'>update your registry entry</a>.<br/>
+    <br/>
+    {% if unknown_dates %}
+    One or both of your dates is unknown.<br/>
+    Please <a href='useredit.php'>update your registration records</a> so that we can schedule events for maximum
+    attendance<br/>
+    Thank you<br/>
+    {% endif %}
+    {% else %}
+    We don't know if you're joining us this year.
+    If you can come please <a href='useredit.php'>update your user record</a>. set "attending" and enter your dates<br>
+    {% endif %}
+
+    <table class='events'>
+        <tr>
+            <th colspan=4>
+                You are responsible for these events
+            </th>
+        </tr>
+        <tr>
+            <th class='organise_name'>Title</th>
+            <th class='event_subs'>Subs.</th>
+            <th class='event_messages'>Msgs.</th>
+            <th class='event_schedule'>Schedule</th>
+        </tr>
+        {% for event in org_events %}
+        <tr>
+            <td class='organise_name'>
+                <a href="forum.php?forum={{event['id']}}">{{event['name']}}</a>
+            </td>
+            <td class='event_subs'>{{event['attendees']}}</td>
+            <td class='event_messages'>{{event['messages']}}</td>
+            <td class='event_schedule'>{{event['schedule_text']}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    <table class='events' border='1'>
+        <TR>
+            <TH COLSPAN=5>
+                <span style='text-align: center;'>You are registered for {{registered_for}} <a href='activities.php'>events</a></span>
+            </th>
+        </tr>
+        <tr>
+            <th class='event_name'>Event</th>
+            <th class='event_owner'>Co-ordinator</th>
+            <th class='event_subs'>Subs.</th>
+            <th class='event_messages'>Msgs.</th>
+            <th class='event_schedule'>Schedule</th>
+        </tr>
+        {% for event in att_events %}
+        <tr>
+            <td class='event_name'>
+                <A href="forum.php?forum={{event['id']}}">{{event['name']}}</a>
+            </td>
+            <td class='event_owner'>
+                <a href="userview.php?user={{event['owner']}}">{{event['owner_name']}}</a>
+            </td>
+            <TD class='event_subs'>
+                {{event['attendees']}}
+            </td>
+            <TD class='event_messages'>
+                {{event['messages']}}
+            </td>
+            <TD class='event_schedule'>
+                {{event['schedule_text']}}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    <table class='messages'>
+        <tr>
+            <th colspan='4'>
+                <span style='text-align: center; text-emphasis: bold;'>Message Board</span>
+            </th>
+        </tr>
+        <tr>
+            <th colspan='4'>
+                <span style='text-align: center;'>{{message_count}} Message(s) in Open Forum</span>
+            </th>
+        </tr>
+        {% if message_count > 0 %}
+        <tr>
+            <th class='message_from'>
+                From
+            </th>
+            <th class='message_subject'>
+                Subject
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                &nbsp;
+            </th>
+        </tr>
+        {% endif %}
+        {% for message in messages %}
+        <tr>
+            <td class='message_from'>
+                {{message['firstname']}} {{message['surname']}}
+            </td>
+            <td class='message_subject'>
+                {{message['subject']}}
+            </td>
+            <td>
+                {{message['posted']}}
+            </td>
+            <td>
+                <a href="messages.php?submit=read&number={{message['mid']}}">Read</a>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class='post_message'>
+            <td colspan='4'>
+                <A href="messages.php?submit=write">Post a message</a>
+            </td>
+        </tr>
+    </table>
+    <script type='text/javascript'>
+        google.setOnLoadCallback(drawMap);
+        function drawMap() {
+            var data = new google.visualization.DataTable();
+            data.addRows(9);
+            data.addColumn('string', 'Country');
+            data.addColumn('number', 'Attendees');
+            data.setValue(0, 0, 'BE');
+            data.setValue(0, 1, 2013);
+            data.setValue(1, 0, 'CZ');
+            data.setValue(1, 1, 2013);
+            data.setValue(2, 0, 'DE');
+            data.setValue(2, 1, 2013);
+            data.setValue(3, 0, 'NL');
+            data.setValue(3, 1, 2013);
+            data.setValue(4, 0, 'NO');
+            data.setValue(4, 1, 2013);
+            data.setValue(5, 0, 'SK');
+            data.setValue(5, 1, 2013);
+            data.setValue(6, 0, 'SE');
+            data.setValue(6, 1, 2013);
+            data.setValue(7, 0, 'CH');
+            data.setValue(7, 1, 2013);
+            data.setValue(8, 0, 'GB');
+            data.setValue(8, 1, 2013);
+            var options = {};
+            var container = document.getElementById('map_canvas');
+            var map = new google.visualization.IntensityMap(container);
+            map.draw(data, options);
+            options.region = 'europe';
+            container = document.getElementById('map_canvas2');
+            map = new google.visualization.IntensityMap(container);
+            map.draw(data, options);
+        }
+        ;
+    </script>
+    <div id='maps' class='maps'>
+        <div id='map_canvas' class='map_canvas'></div>
+        <div id='map_canvas2' class='map_canvas'></div>
+    </div>
+</div>
+
+
+{# include 'footer.html' #}
+</div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 <?php # -*- php -*-
+require_once 'vendor/autoload.php';
 
 require("dbconnect.inc.php");
 
@@ -20,6 +21,8 @@ for ($i = 0; $i <= $duration + 1; $i++) {
   $weekday[$i] = date("l", $timestamp);
 }
 
+
+#echo $twig->render('index.html', array('name' => 'Fabien'));
 # ----------------------------------------------------------------------
 
 function CheckLoggedInOrRedirect()
@@ -30,6 +33,15 @@ function CheckLoggedInOrRedirect()
     header("Location: login.php");
     exit();
   }
+}
+
+function GetTwig()
+{
+  $loader = new Twig_Loader_Filesystem('templates/');
+  return new Twig_Environment($loader, array(
+    'cache' => '/var/tmp/compilation_cache',
+    'debug' => true,
+  ));
 }
 
 function HtmlHead($page, $title, $status, /** @noinspection PhpUnusedParameterInspection */

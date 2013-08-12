@@ -70,31 +70,6 @@ h6 {
     text-align: right;
 }
 
-table.table {
-    border: 0;
-    border-top: double black;
-    border-bottom: double black;
-}
-
-.table tr {
-    border: 0;
-}
-
-.table th {
-    border: 0;
-    border-bottom: solid black 1px;
-    border-left: gray solid 1px;
-    border-right: gray solid 1px;
-    padding: 1px 5px;
-}
-
-.table td {
-    border: 0;
-    border-left: gray solid 1px;
-    border-right: gray solid 1px;
-    padding: 1px 5px;
-}
-
 .dateline {
     font-size: 9pt;
     font-style: italic;
@@ -115,22 +90,6 @@ table.table {
 
 div.content {
     width: auto;
-}
-
-.leftcolumn {
-    padding: 1.5ex 1.5ex 0 1.5ex;
-    width: 1px;
-    font-family: Verdana, Optima, Helvetica, sans-serif;
-    text-align: center;
-    font-size: 9pt;
-    vertical-align: top;
-}
-
-.protected .leftcolumn {
-}
-
-.leftcolumn img {
-    margin: 0;
 }
 
 .centercolumn {
@@ -220,39 +179,34 @@ img.medium {
     padding: 0 2ex 0 2ex;
 }
 
-/*table.schedule {*/
-/*border: 0;*/
-/*border-top: double black;*/
-/*border-bottom: double black*/
-/*}*/
-
 /* Schedule table */
 table.schedule {
-    width: 95%;
+    /*width: 95%;*/
     border-spacing: 1px;
     border: outset black;
     border-collapse: separate;
 }
 
-tr.schedule {
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto 0 auto;
+    border: outset gray 1px;
+}
+
+tr {
     border: 0;
 }
 
-th.schedule {
-    border: 0;
-    border-bottom: solid black 1px;
-    border-left: gray solid 1px;
+th {
     border-right: gray solid 1px;
-    /*border: none black 0;*/
     background-color: #DDD;
+    border: none black 0;
 }
 
-td.schedule {
-    border: 0;
-    border-left: gray solid 1px;
-    border-right: gray solid 1px;
-    /*border: none black 0;*/
+td {
     background-color: #EEE;
+    border: none black 0;
 }
 
 th.schedule_time {
@@ -269,25 +223,36 @@ th.users_name {
 
 /* Events tables */
 table.events {
-    width: 100%;
+    /*width: 100%;*/
     border-spacing: 1px;
     border-collapse: separate;
     margin: 0 auto 0 auto;
     border: outset gray 1px;
 }
 
-/* Applies to the cells after schedule */
-.events th {
-    background-color: #DDD;
+table.reginfo {
+    /*width: 95%;*/
+    border-spacing: 0;
+    border-collapse: collapse;
 }
 
-.events td {
-    background-color: #EEE;
+th.subject {
+    width: 40%;
+}
+
+.organise_name {
+    width: 60%;
+    text-align: left;
 }
 
 .event_name {
-    width: 30%;
+    width: 40%;
     text-align: left;
+}
+
+.event_owner {
+    width: 20%;
+    text-align: center;
 }
 
 .event_messages {
@@ -329,18 +294,9 @@ table.events {
     text-align: left;
 }
 
-table.reginfo {
-    width: 95%;
-    border-spacing: 0;
-    border-collapse: collapse;
-}
-
-th.subject {
-    width: 40%;
-}
-
-th.from {
+.message_from {
     width: 35%;
+    text-align: left;
 }
 
 hr {
@@ -389,36 +345,6 @@ hr {
     width: 100%;
 }
 
-.schedule {
-    margin: 0 auto 0 auto;
-    border: outset gray 1px;
-}
-
-.schedule td {
-    border: none black 0;
-    background-color: #EEE;
-}
-
-.schedule th {
-    border: none black 0;
-    background-color: #DDD;
-}
-
-.reginfo {
-    margin: 0 auto 0 auto;
-    border: outset gray 1px;
-}
-
-.reginfo td {
-    border: none black 0;
-    background-color: #EEE;
-}
-
-.reginfo th {
-    border: none black 0;
-    background-color: #DDD;
-}
-
 .unscheduled {
     background-color: #EE6 !important;
 }
@@ -430,3 +356,65 @@ hr {
 .conflict {
     background-color: #FF0000;
 }
+
+.logo {
+    float: left;
+}
+
+.header {
+    float: right;
+    text-align: center;
+    vertical-align: middle;
+    width: 80%;
+    margin-right: 5%;
+}
+
+.body {
+    clear: both;
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 5%;
+}
+
+.maps {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.post_message {
+    text-align: right;
+}
+
+/*table.table {*/
+/*border: 0;*/
+/*border-top: double black;*/
+/*border-bottom: double black;*/
+/*}*/
+
+/*.table tr {*/
+/*border: 0;*/
+/*}*/
+
+/*.table th {*/
+/*border: 0;*/
+/*border-bottom: solid black 1px;*/
+/*border-left: gray solid 1px;*/
+/*border-right: gray solid 1px;*/
+/*padding: 1px 5px;*/
+/*}*/
+
+/*.table td {*/
+/*border: 0;*/
+/*border-left: gray solid 1px;*/
+/*border-right: gray solid 1px;*/
+/*padding: 1px 5px;*/
+/*}*/
+
+/* Applies to the cells after schedule */
+/*.events th {*/
+/*background-color: #DDD;*/
+/*}*/
+
+/*.events td {*/
+/*background-color: #EEE;*/
+/*}*/
