@@ -199,9 +199,9 @@ tr {
 }
 
 th {
+    border: none black 0;
     border-right: gray solid 1px;
     background-color: #DDD;
-    border: none black 0;
 }
 
 td {

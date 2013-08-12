@@ -33,7 +33,7 @@
 </div>
 <div class='header'>
     <a href="{{eventhost}}">
-        <h1>LBW {{year}}</h1>
+        <span style='font-size: 36;'>LBW {{year}}</span>
     </a>
 
     <h1>{{location}}<br/>
@@ -69,7 +69,7 @@
     {% endif %}
     <hr/>
     <br/>
-    <b>Welcome, {{firstname}}!</b>
+    <span style='font-weight: bold;'>Welcome, {{firstname}}!</span>
     <br/>
     <br/>
     {% if attending %}
@@ -149,7 +149,7 @@
     <table class='messages'>
         <tr>
             <th colspan='4'>
-                <span style='text-align: center; text-emphasis: bold;'>Message Board</span>
+                <span style='text-align: center; font-weight: bold;'>Message Board</span>
             </th>
         </tr>
         <tr>
@@ -229,7 +229,6 @@
             map = new google.visualization.IntensityMap(container);
             map.draw(data, options);
         }
-        ;
     </script>
     <div id='maps' class='maps'>
         <div id='map_canvas' class='map_canvas'></div>
