@@ -18,15 +18,7 @@ function sendMailToEventOwner($event, $new_user)
       "  The LBW $year registration site", "");
 }
 
-$_SESSION["userid"] = 0;
-session_start();
-if (!$_SESSION["userid"]) {
-  header("Location: login.php");
-  exit();
-}
-
-/* variables from the environment (GET/POST) */
-extract($_REQUEST, EXTR_SKIP);
+CheckLoggedInOrRedirect();
 
 $db = ConnectMysql();
 

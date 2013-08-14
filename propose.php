@@ -20,24 +20,16 @@ function sendEmailToList($event)
       "  The LBW $year registration site", "From: $frommail");
 }
 
-session_start();
-if (!array_key_exists("userid", $_SESSION)) {
-  header("Location: login.php");
-  exit();
-}
+CheckLoggedInOrRedirect();
 
-$heading = mysql_real_escape_string(trim($_REQUEST['heading']));
-$schedtxt = mysql_real_escape_string(trim($_REQUEST['schedtxt']));
-$type = mysql_real_escape_string(trim($_REQUEST['type']));
-$number = mysql_real_escape_string(trim($_REQUEST['number']));
-$description = mysql_real_escape_string(trim($_REQUEST['description']));
-$forum_duration = mysql_real_escape_string(trim($_REQUEST['forum_duration']));
+$heading = GetEntryFromRequest('heading', '');
+$schedtxt = GetEntryFromRequest('schedtxt', '');
+$type = GetEntryFromRequest('type', 0);
+$number = GetEntryFromRequest('number', 0);
+$description = GetEntryFromRequest('description', '');
+$forum_duration = GetEntryFromRequest('forum_duration', 0);
+$option = GetEntryFromRequest('option', 'propose');
 
-if (!isset($option)) {
-  if ($type > 0) {
-    $option = "propose";
-  }
-}
 
 switch ($option) {
   case "ABORT":

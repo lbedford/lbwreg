@@ -1,12 +1,7 @@
 <?php
 require("basefunc.inc.php");
 
-$_SESSION["userid"] = 0;
-session_start();
-if (!$_SESSION["userid"]) {
-  header("Location: login.php");
-  exit();
-}
+CheckLoggedInOrRedirect();
 
 $db = ConnectMysql();
 if (!array_key_exists('option', $_REQUEST)) {

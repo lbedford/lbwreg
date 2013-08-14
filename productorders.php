@@ -1,12 +1,7 @@
 <?php
 include("basefunc.inc.php");
 
-$_SESSION["userid"] = 0;
-session_start();
-if (!$_SESSION["userid"]) {
-  header("Location: login.php");
-  exit();
-}
+CheckLoggedInOrRedirect();
 
 if ($_SESSION["userstatus"] < 8) {
   header("Location: tshirts.php");

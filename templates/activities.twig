@@ -1,0 +1,245 @@
+{% extends "base.twig" %}
+{% block body %}
+    <br/>
+    <table class='events'>
+        <tr>
+            <th colspan='5'>
+                Workshops
+            </th>
+        </tr>
+        <tr>
+            <th class='event_name'>
+                Workshop Project
+            </th>
+            <th class='event_organiser'>
+                Co-ordinator
+            </th>
+            <th class='event_subs'>
+                Subs.
+            </th>
+            <th class='event_messages'>
+                Msg.
+            </th>
+            <th class='event_schedule'>
+                Schedule
+            </th>
+        </tr>
+        {% for event in workshops %}
+            <tr>
+                <td class='event_name'>
+                    <a href="forum.php?forum={{ event['id'] }}">{{ event['name'] }}</a>
+                </td>
+                <td class='event_owner'>
+                    <a href="userview.php?user={{ event['owner_id'] }}">{{ event['owner_name'] }}</a>
+                </td>
+                <td class='event_subs'>
+                    {{ event['subs'] }}
+                </td>
+                <td class='event_messages'>
+                    {{ event['messages'] }}
+                </td>
+                <td class='event_schedule'>
+                    {{ event['schedule_text'] }}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan='5'>
+                <a href="#workshop_propose" onclick="javascript:Display('workshop_propose')">Offer to manage a workshop
+                    project</a>
+            </td>
+        </tr>
+    </table>
+    <br><br>
+    <table class='events'>
+        <tr>
+            <th colspan='5'>
+                Lectures &amp; Seminars
+            </th>
+        </tr>
+        <tr>
+            <th class='event_name'>
+                Subject
+            </th>
+            <th class='event_organiser'>
+                Speaker
+            </th>
+            <th class='event_subs'>
+                Subs.
+            </th>
+            <th class='event_messages'>
+                Msg.
+            </th>
+            <th class='event_schedule'>
+                Schedule
+            </th>
+        </tr>
+        {% for event in lectures %}
+            {% include "event_table_rows.twig" %}
+        {% endfor %}
+        <tr>
+            <td colspan=4>
+                &nbsp;
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='5'>
+                <a href="#lecture_propose">Offer to present a class</a>
+            </td>
+        </tr>
+    </table>
+    <br><br>
+    <table class='events'>
+        <tr>
+            <th colspan='5'>
+                Excursions &amp; Hikes
+            </th>
+        </tr>
+        <tr>
+            <th class='event_name'>
+                Destination
+            </th>
+            <th class='event_organiser'>
+                Organiser
+            </th>
+            <th class='event_subs'>
+                Subs.
+            </th>
+            <th class='event_messages'>
+                Msg.
+            </th>
+            <th class='event_schedule'>
+                Schedule
+            </th>
+        </tr>
+        {% for event in hikes %}
+            {% include "event_table_rows.twig" %}
+        {% endfor %}
+        <tr>
+            <td colspan='5'>
+                <a href="#hike_propose">Offer to organise a hike or excursion</a>
+            </td>
+        </tr>
+    </table>
+    <br><br>
+    <table class='events'>
+        <tr>
+            <th colspan='5'>
+                Community Events
+            </th>
+        </tr>
+        <tr>
+            <th class='event_name'>
+                Activity
+            </th>
+            <th class='event_organiser'>
+                Organiser
+            </th>
+            <th class='event_subs'>
+                Subs.
+            </th>
+            <th class='event_messages'>
+                Msg.
+            </th>
+            <th class='event_schedule'>
+                Schedule
+            </th>
+        </tr>
+        {% for event in community_events %}
+            {% include "event_table_rows.twig" %}
+        {% endfor %}
+        <tr>
+            <td colspan='5'>
+                <a href="#community_event_propose">Offer to organise a community event</a>
+            </td>
+        </tr>
+    </table>
+
+    <div id='workshop_propose' class='propose_window'>
+        <FORM METHOD=POST action="/propose.php">
+            <INPUT TYPE=HIDDEN NAME=type VALUE=1>
+            Workshop Name<br>
+            <INPUT TYPE=TEXT NAME="heading" VALUE="A name for the project" SIZE=50><br>
+            Details (Use HTML in this field) <br>
+            <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of what you
+                intend to achieve. You should mention any reading material that users might wish to study before
+                coming.</textarea><br>
+            <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
+        </form>
+        <a href="/activities.php">Cancel</a>
+    </div>
+
+    {% set title = 'lecture' %}
+    {% set type = 2 %}
+    <div id='lecture_propose' class='propose_window'>
+        <FORM METHOD=POST action="/propose.php">
+            <INPUT TYPE=HIDDEN NAME=type VALUE=2>
+            Lecture Title<br>
+            <INPUT TYPE=TEXT NAME="heading" VALUE="A title for the lecture" SIZE=50><br>
+            Short name (for schedule diary entry)<br>
+            <INPUT TYPE=TEXT NAME="schedtxt" VALUE="" SIZE=12><br>
+            Details (Use HTML in this field) <br>
+            <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of what you
+                intend to cover. You should state whether any previous knowledge of the subject is required. You should
+                mention any reading material that users might wish to study before coming.</textarea><br>
+            The lecture will be about
+            <select name="forum_duration">
+                {% for duration in range(1,8) %}
+                    <option value='{{ duration }}'> {{ duration }}</option>
+                {% endfor %}
+            </select> hours duration<br>
+            <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
+        </form>
+        <a href="/activities.php">Cancel</a>
+    </div>
+
+    <div id='hike_propose' class='propose_window'>
+        <FORM METHOD=POST action="/propose.php">
+            <INPUT TYPE=HIDDEN NAME=type VALUE=3>
+            Excursion Title<br>
+            <INPUT TYPE=TEXT NAME="heading" VALUE="A name for the excursion" SIZE=50><br>
+            Short name (for schedule diary entry)<br>
+            <INPUT TYPE=TEXT NAME="schedtxt" VALUE="" SIZE=12><br>
+            Details (Use HTML in this field) <br>
+            <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of the type of
+                excursion proposed. You should state any requirements (experienced climbers only etc.).</textarea><br>
+            <INPUT TYPE=HIDDEN NAME=number VALUE=1>
+            The Event will be about
+            <select name="forum_duration">
+                {% for duration in range(1,8) %}
+                    <option value='{{ duration }}'> {{ duration }}</option>
+                {% endfor %}
+            </select> hours long<br>
+            <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
+        </form>
+        <a href="/activities.php">Cancel</a>
+    </div>
+
+    <div id='community_event_propose' class='propose_window'>
+        <FORM METHOD=POST action="/propose.php">
+            <INPUT TYPE=HIDDEN NAME=type VALUE=4>
+            Event Title<br>
+            <INPUT TYPE=TEXT NAME="heading" VALUE="A title for the event" SIZE=50>
+            <br>
+            Short name (for schedule diary entry)
+            <br>
+            <INPUT TYPE=TEXT NAME="schedtxt" VALUE="" SIZE=12>
+            <br>
+            Details (Use HTML in this field)
+            <br>
+            <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of the type of
+                event proposed. You should state any special requirements.</textarea><br>
+            <INPUT TYPE=HIDDEN NAME=number VALUE=1>
+            The Event will be about
+            <select name="forum_duration">
+                {% for duration in range(1,8) %}
+                    <option value='{{ duration }}'> {{ duration }}</option>
+                {% endfor %}
+            </select> hours long<br>
+            <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
+        </form>
+        <a href="/activities.php">Cancel</a>
+    </div>
+{% endblock %}

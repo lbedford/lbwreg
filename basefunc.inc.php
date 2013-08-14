@@ -9,7 +9,7 @@ require_once("lib/template.class.php");
 
 date_default_timezone_set($timeZone);
 
-$date[NULL] = "undecided";
+$date[-1] = "undecided";
 
 # The days of the event
 $start_time = strtotime("-1 day", strtotime("$year-$month-$day"));
@@ -17,13 +17,10 @@ for ($i = 0; $i <= $duration + 1; $i++) {
   $timestamp = strtotime("+ $i day", $start_time);
   $timestamps[$i] = $timestamp;
   $date[$i] = date("j F", $timestamp);
+  $longdate[$i] = date("l j F", $timestamp);
   $shortday[$i] = date("D", $timestamp);
   $weekday[$i] = date("l", $timestamp);
 }
-
-
-#echo $twig->render('index.html', array('name' => 'Fabien'));
-# ----------------------------------------------------------------------
 
 function CheckLoggedInOrRedirect()
 {
@@ -42,6 +39,21 @@ function GetTwig()
     'cache' => '/var/tmp/compilation_cache',
     'debug' => true,
   ));
+}
+
+function GetBasicTwigVars()
+{
+  global $year, $location, $date;
+  $template_details = Array();
+  if ($_SESSION["userstatus"] > 8) {
+    $template_details['admin'] = 1;
+  }
+
+  $template_details['year'] = $year;
+  $template_details['location'] = $location;
+  $template_details['start_date'] = $date[1];
+  $template_details['end_date'] = $date[count($date) - 3];
+  return $template_details;
 }
 
 function HtmlHead($page, $title, $status, /** @noinspection PhpUnusedParameterInspection */

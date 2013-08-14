@@ -8,7 +8,8 @@ CheckLoggedInOrRedirect();
 
 $userid = $_SESSION["userid"];
 $userstatus = $_SESSION["userstatus"];
-$user = $_REQUEST["user"];
+$user = GetEntryFromRequest('user', $userid);
+$LBWID = GetEntryFromRequest('LBWID', -1);
 
 global $date, $xport, $acctype, $accorder;
 
@@ -19,7 +20,7 @@ if (!($userid == $user || $userstatus == 16)) {
   exit();
 }
 
-if (!isset($LBWID)) {
+if ($LBWID == -1) {
   $sql = "SELECT * FROM people2 WHERE id='$user'";
   $result = mysql_query($sql, $db);
   $row = mysql_fetch_array($result);

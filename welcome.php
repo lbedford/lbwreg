@@ -19,11 +19,7 @@ function CalculateTimeToSinceLbw($year, $month, $day)
     'time_to_since_lbw' => "$days days, $hours hours, $mins mins");
 }
 
-session_start();
-if (!array_key_exists("userid", $_SESSION)) {
-  header("Location: login.php");
-  exit();
-}
+CheckLoggedInOrRedirect();
 
 header("Pragma: no-cache");
 $db = ConnectMysql();
@@ -38,18 +34,14 @@ if (!$result) {
 $user_row = mysql_fetch_array($result);
 $_SESSION["userstatus"] = intval($user_row["status"]);
 
-if ($_SESSION["userstatus"] > 8) {
-  $admin = 1;
-}
 
 global $date, $shortday, $timestamps;
 
-$template_details = CalculateTimeToSinceLbw($year, $month, $day);
+$template_details = GetBasicTwigVars();
+$template_details = array_merge($template_details,
+  CalculateTimeToSinceLbw($year, $month, $day));
 
-$template_details['year'] = $year;
-$template_details['location'] = $location;
-$template_details['start_date'] = $date[1];
-$template_details['end_date'] = $date[count($date) - 3];
+
 $result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries " .
 "FROM people2 where (attending>0) AND (status>1) " .
 "AND (present = 1)", $db);
@@ -171,7 +163,6 @@ if (!$result) {
 
       array_push($template_details['att_events'], $att_event);
     }
-    echo "</table><br />";
   }
 }
 
@@ -184,29 +175,19 @@ while ($msg = mysql_fetch_array($result)) {
   array_push($template_details['messages'], $msg);
 }
 
-//$sql = "SELECT sum(people2.attending + people2.children) AS total,country.code FROM people2,country WHERE country.id = people2.country AND people2.attending > 0 AND people2.status > 1 GROUP BY country.name;";
-//$result = mysql_query($sql, $db);
-//$count = mysql_num_rows($result);
-//$drawmap_body = "data.addRows($count);\n" .
-//    "data.addColumn('string', 'Country');\n" .
-//    "data.addColumn('number', 'Attendees');\n";
-//if ($count) {
-//  $counter = 0;
-//  while ($msg = mysql_fetch_array($result)) {
-//    $drawmap_body .= "data.setValue($counter, 0, '" . $msg["code"] . "');\n";
-//    $drawmap_body .= "data.setValue($counter, 1, $year);\n";
-//    $counter++;
-//  }
-//}
-//
-//
-//echo "$drawmap_header";
-//echo "$drawmap_body";
-//echo "$drawmap_footer";
-//echo "<div id='map_canvas' style='text-align: center;'></div>\n";
-//echo "<div id='map_canvas2' style='text-align: center;'></div>\n";
-//HtmlTail();
-
-//error_log(print_r($template_details));
+$sql = "SELECT sum(people2.attending + people2.children) AS total,country.code FROM people2,country WHERE country.id = people2.country AND people2.attending > 0 AND people2.status > 1 GROUP BY country.name;";
+$result = mysql_query($sql, $db);
+$count = mysql_num_rows($result);
+$template_details['map_body'] = Array("data.addRows($count);",
+  "data.addColumn('string', 'Country');",
+  "data.addColumn('number', 'Attendees');");
+if ($count) {
+  $counter = 0;
+  while ($msg = mysql_fetch_array($result)) {
+    array_push($template_details['map_body'], "data.setValue($counter, 0, '" . $msg["code"] . "');");
+    array_push($template_details['map_body'], "data.setValue($counter, 1, $year);");
+    $counter++;
+  }
+}
 $twig = GetTwig();
-echo $twig->render('welcome.html', $template_details);
+echo $twig->render('welcome.twig', $template_details);

@@ -70,16 +70,6 @@ h6 {
     text-align: right;
 }
 
-.dateline {
-    font-size: 9pt;
-    font-style: italic;
-    text-align: right;
-}
-
-.docinfo-name {
-    text-align: left;
-}
-
 .content {
     background-color: white;
     margin: 1ex;
@@ -96,48 +86,6 @@ div.content {
     padding: 0 1ex 0 1ex;
 }
 
-.strut {
-    height: 400px;
-}
-
-.thumbleft {
-    border: solid black 3px;
-    margin: 0 1ex 1ex 0;
-}
-
-.thumbright {
-    border: solid black 3px;
-    margin: 0 1ex 1ex 1ex;
-}
-
-img.medium {
-    border: solid black 3px;
-    margin: 2ex;
-    text-align: center;
-}
-
-.quote {
-    padding: 1ex;
-    background-color: #DDF;
-    font-style: italic;
-    margin: 1ex 4ex 1ex 1ex;
-}
-
-.extract {
-    margin: 1ex;
-}
-
-.writer {
-    font-weight: bold;
-}
-
-.signed {
-    font-style: italic;
-    font-size: 110%;
-    text-align: right;
-    margin-right: 10ex;
-}
-
 .pre {
     font-family: monospace;
     font-size: 9pt;
@@ -151,37 +99,8 @@ img.medium {
     margin-top: 2ex;
 }
 
-.item .item {
-    display: list-item;
-    list-style-type: circle;
-    margin-left: 4ex;
-    margin-top: 0;
-}
-
-.more {
-    display: list-item;
-    list-style-type: none;
-    margin-left: 4ex;
-    font-style: italic;
-}
-
-.picture {
-    font-style: italic;
-    text-align: center;
-    width: 100%;
-}
-
-.sponsorfoot {
-    padding: 3ex 0 1ex 104px;
-}
-
-.sponsorlogo {
-    padding: 0 2ex 0 2ex;
-}
-
 /* Schedule table */
 table.schedule {
-    /*width: 95%;*/
     border-spacing: 1px;
     border: outset black;
     border-collapse: separate;
@@ -194,23 +113,48 @@ table {
     border: outset gray 1px;
 }
 
+/* Events tables */
+/*table.events {*/
+/*border-collapse: collapse;*/
+/*margin: 0 auto 0 auto;*/
+/*border: outset gray 1px;*/
+/*}*/
+
+table.reginfo {
+    /*border-spacing: 0;*/
+    border-collapse: collapse;
+}
+
 tr {
     border: 0;
 }
 
 th {
     border: none black 0;
-    border-right: gray solid 1px;
+    /*border-right: gray solid 1px;*/
     background-color: #DDD;
 }
 
 td {
     background-color: #EEE;
     border: none black 0;
+    margin: 1px;
 }
 
-th.schedule_time {
+.schedule_time {
     width: 10%;
+}
+
+.schedule_short {
+    width: 30%;
+}
+
+.schedule_medium {
+    width: 30%;
+}
+
+.schedule_long {
+    width: 30%;
 }
 
 th.users_id {
@@ -219,21 +163,6 @@ th.users_id {
 
 th.users_name {
     width: 20%;
-}
-
-/* Events tables */
-table.events {
-    /*width: 100%;*/
-    border-spacing: 1px;
-    border-collapse: separate;
-    margin: 0 auto 0 auto;
-    border: outset gray 1px;
-}
-
-table.reginfo {
-    /*width: 95%;*/
-    border-spacing: 0;
-    border-collapse: collapse;
 }
 
 th.subject {
@@ -299,6 +228,15 @@ th.subject {
     text-align: left;
 }
 
+.message_subject {
+    text-align: left;
+}
+
+.message_posted {
+    text-align: right;
+    width: 20%;
+}
+
 hr {
     width: 90%;
 }
@@ -338,11 +276,6 @@ hr {
 .adminbar a {
     text-decoration: none;
     color: #FF8;
-}
-
-.centercolumn {
-    text-align: center;
-    width: 100%;
 }
 
 .unscheduled {
@@ -385,36 +318,17 @@ hr {
     text-align: right;
 }
 
-/*table.table {*/
-/*border: 0;*/
-/*border-top: double black;*/
-/*border-bottom: double black;*/
-/*}*/
+.lbw_start_time {
+    font-weight: bold;
+}
 
-/*.table tr {*/
-/*border: 0;*/
-/*}*/
-
-/*.table th {*/
-/*border: 0;*/
-/*border-bottom: solid black 1px;*/
-/*border-left: gray solid 1px;*/
-/*border-right: gray solid 1px;*/
-/*padding: 1px 5px;*/
-/*}*/
-
-/*.table td {*/
-/*border: 0;*/
-/*border-left: gray solid 1px;*/
-/*border-right: gray solid 1px;*/
-/*padding: 1px 5px;*/
-/*}*/
-
-/* Applies to the cells after schedule */
-/*.events th {*/
-/*background-color: #DDD;*/
-/*}*/
-
-/*.events td {*/
-/*background-color: #EEE;*/
-/*}*/
+.propose_window {
+    visibility: hidden;
+    position: fixed;
+    height: 90%;
+    width: 90%;
+    top: 5%;
+    left: 5%;
+    background: #FFFFFF;
+    border: solid black 1px;
+}

@@ -6,12 +6,7 @@ if (array_key_exists("order", $_REQUEST)) {
   $order = addslashes($_REQUEST["order"]);
 }
 
-session_start();
-if (!array_key_exists("userid", $_SESSION)) {
-  header("Location: login.php");
-  exit();
-}
-
+CheckLoggedInOrRedirect();
 $db = ConnectMysql();
 
 HtmlHead("participants", "Participants", $_SESSION["userstatus"], $_SESSION["userid"]);
