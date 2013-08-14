@@ -86,7 +86,7 @@
         </tr>
         <tr>
             <td colspan='5'>
-                <a href="#lecture_propose">Offer to present a class</a>
+                <a href="#lecture_propose" onclick="javascript:Display('lecture_propose')">Offer to present a class</a>
             </td>
         </tr>
     </table>
@@ -119,7 +119,8 @@
         {% endfor %}
         <tr>
             <td colspan='5'>
-                <a href="#hike_propose">Offer to organise a hike or excursion</a>
+                <a href="#hike_propose" onclick="javascript:Display('hike_propose')">Offer to organise a hike or
+                    excursion</a>
             </td>
         </tr>
     </table>
@@ -152,7 +153,8 @@
         {% endfor %}
         <tr>
             <td colspan='5'>
-                <a href="#community_event_propose">Offer to organise a community event</a>
+                <a href="#community_event_propose" onclick="javascript:Display('community_event_propose')">Offer to
+                    organise a community event</a>
             </td>
         </tr>
     </table>
@@ -171,8 +173,6 @@
         <a href="/activities.php">Cancel</a>
     </div>
 
-    {% set title = 'lecture' %}
-    {% set type = 2 %}
     <div id='lecture_propose' class='propose_window'>
         <FORM METHOD=POST action="/propose.php">
             <INPUT TYPE=HIDDEN NAME=type VALUE=2>
