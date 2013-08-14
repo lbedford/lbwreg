@@ -159,110 +159,19 @@
         </tr>
     </table>
 
-    <div id='workshop_propose' class='propose_window'>
-        <FORM METHOD=POST action="/propose.php">
-            <INPUT TYPE=HIDDEN NAME=type VALUE=1>
-            Workshop Name<br>
-            <label>
-                <INPUT TYPE=TEXT NAME="heading" VALUE="A name for the project" SIZE=50>
-            </label><br>
-            Details (Use HTML in this field) <br>
-            <label>
-                <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of what
-                    you
-                    intend to achieve. You should mention any reading material that users might wish to study before
-                    coming.</textarea><br>
-                <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
-        </form>
-        <a href="/activities.php">Cancel</a>
-    </div>
+    {% set event_type = 1 %}
+    {% set event_type_text = 'Workshop' %}
+    {% include 'propose_window.twig' %}
 
-    <div id='lecture_propose' class='propose_window'>
-        <FORM METHOD=POST action="/propose.php">
-            <INPUT TYPE=HIDDEN NAME=type VALUE=2>
-            Lecture Title<br>
-            <label>
-                <INPUT TYPE=TEXT NAME="heading" VALUE="A title for the lecture" SIZE=50>
-            </label><br>
-            Short name (for schedule diary entry)<br>
-            <label>
-                <INPUT TYPE=TEXT NAME="schedtxt" VALUE="" SIZE=12>
-            </label><br>
-            Details (Use HTML in this field) <br>
-            <label>
-                <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of what
-                    you
-                    intend to cover. You should state whether any previous knowledge of the subject is required. You
-                    should
-                    mention any reading material that users might wish to study before coming.</textarea><br>
-                The lecture will be about
-                <select name="forum_duration">
-                    {% for duration in range(1,8) %}
-                        <option value='{{ duration }}'> {{ duration }}</option>
-                    {% endfor %}
-                </select><br>
-                <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
-        </form>
-        <a href="/activities.php">Cancel</a>
-    </div>
+    {% set event_type = 2 %}
+    {% set event_type_text = 'Lecture' %}
+    {% include 'propose_window.twig' %}
 
-    <div id='hike_propose' class='propose_window'>
-        <FORM METHOD=POST action="/propose.php">
-            <INPUT TYPE=HIDDEN NAME=type VALUE=3>
-            Excursion Title<br>
-            <label>
-                <INPUT TYPE=TEXT NAME="heading" VALUE="A name for the excursion" SIZE=50>
-            </label><br>
-            Short name (for schedule diary entry)<br>
-            <label>
-                <INPUT TYPE=TEXT NAME="schedtxt" VALUE="" SIZE=12>
-            </label><br>
-            Details (Use HTML in this field) <br>
-            <label>
-                <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of the
-                    type of
-                    excursion proposed. You should state any requirements (experienced climbers only
-                    etc.).</textarea><br>
-                <INPUT TYPE=HIDDEN NAME=number VALUE=1>
-                The Event will be about
-                <select name="forum_duration">
-                    {% for duration in range(1,8) %}
-                        <option value='{{ duration }}'> {{ duration }}</option>
-                    {% endfor %}
-                </select> hours long<br>
-                <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
-        </form>
-        <a href="/activities.php">Cancel</a>
-    </div>
+    {% set event_type = 3 %}
+    {% set event_type_text = 'Hike' %}
+    {% include 'propose_window.twig' %}
 
-    <div id='community_event_propose' class='propose_window'>
-        <FORM METHOD=POST action="/propose.php">
-            <INPUT TYPE=HIDDEN NAME=type VALUE=4>
-            Event Title<br>
-            <label>
-                <INPUT TYPE=TEXT NAME="heading" VALUE="A title for the event" SIZE=50>
-            </label>
-            <br>
-            Short name (for schedule diary entry)
-            <br>
-            <label>
-                <INPUT TYPE=TEXT NAME="schedtxt" VALUE="" SIZE=12>
-            </label>
-            <br>
-            Details (Use HTML in this field)
-            <br>
-            <label>
-                <TEXTAREA NAME=description COLS=60 ROWS=10>Here you should enter a more detailed description of the
-                    type of
-                    event proposed. You should state any special requirements.</textarea><br>
-                <INPUT TYPE=HIDDEN NAME=number VALUE=1>
-                <select name="forum_duration">
-                    {% for duration in range(1,8) %}
-                        <option value='{{ duration }}'> {{ duration }}</option>
-                    {% endfor %}
-                </select> hours long<br>
-                <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
-        </form>
-        <a href="/activities.php">Cancel</a>
-    </div>
+    {% set event_type = 4 %}
+    {% set event_type_text = 'Community Event' %}
+    {% include 'propose_window.twig' %}
 {% endblock %}

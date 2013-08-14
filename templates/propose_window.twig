@@ -1,0 +1,24 @@
+<div id='{{ event_type_text|lower|replace(' ', '_') }}_propose' class='propose_window'>
+    <FORM METHOD=POST action="/propose.php">
+        <INPUT TYPE=HIDDEN NAME=type VALUE={{ event_type }}>
+        {{ event_type_text }} Title<br>
+        <label>
+            <INPUT TYPE=TEXT NAME="heading" VALUE="A title for the {{ event_type_text }}" SIZE=50/>
+        </label><br>
+        Short name (for schedule diary entry)<br>
+        <label>
+            <INPUT TYPE=TEXT NAME="schedtxt" VALUE="Too Lazy" SIZE=12/>
+        </label><br>
+        Details (Use HTML in this field) <br>
+        <label>
+            <TEXTAREA NAME=description COLS=60 ROWS=10></textarea><br>
+            The {{ event_type_text }} will be about
+            <select name="forum_duration">
+                {% for duration in range(1,8) %}
+                    <option value='{{ duration }}'> {{ duration }}</option>
+                {% endfor %}
+            </select> hour(s) duration.<br>
+            <INPUT TYPE=SUBMIT NAME=option VALUE=Save/>
+    </form>
+    <a href="/activities.php">Cancel</a>
+</div>
