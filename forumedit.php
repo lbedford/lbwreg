@@ -21,10 +21,6 @@ function honchocheck($user, $evt, $db)
   return 0;
 }
 
-if (!isset($forum)) {
-  $forum = $_SESSION["userforum"];
-}
-
 switch ($option) {
   case "Edit":
     $query = "SELECT owner, name, schedtxt, description, type, number," .

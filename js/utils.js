@@ -5,7 +5,11 @@
  * Time: 09:04
  * To change this template use File | Settings | File Templates.
  */
-function Display(element_id) {
+function ToggleDisplay(element_id) {
     var element = document.getElementById(element_id);
-    element.style.visibility = 'visible';
+    if (element.style.visibility == 'visible') {
+        element.style.visibility = 'hidden';
+    } else {
+        element.style.visibility = 'visible';
+    }
 }

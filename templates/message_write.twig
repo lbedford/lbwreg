@@ -1,0 +1,15 @@
+<div id='message_write' class='message_write'>
+    <FORM METHOD=POST ACTION="messages.php?forum={{ forum_id }}">Posting in Forum: {{ event_name }}<br>
+        <br>
+        From: {{ logged_in_name }}<br>
+        <INPUT TYPE=HIDDEN NAME=FORUM VALUE={{ forum_id }} }}>
+        {% if message_id %}
+            <INPUT TYPE=HIDDEN NAME=previous VALUE={{ message_id }}>
+        {% endif %}
+        <INPUT TYPE=TEXT SIZE=50 NAME=subject VALUE={{ message_subject }}><br>
+        <TEXTAREA NAME=body COLS=60 ROWS=20>{{ message_body }}</textarea>
+        <br>
+        <INPUT TYPE=SUBMIT NAME=submit VALUE=SAVE>
+        <a href="#" onclick="ToggleDisplay('message_write');">Cancel</a>
+    </form>
+</div>

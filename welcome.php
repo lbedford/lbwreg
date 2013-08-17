@@ -24,8 +24,6 @@ CheckLoggedInOrRedirect();
 header("Pragma: no-cache");
 $db = ConnectMysql();
 
-$_SESSION["userforum"] = 1;
-
 $query = "SELECT status, firstname, surname, attending, arrival, departure FROM people2 WHERE id='" . $_SESSION["userid"] . "'";
 $result = mysql_query($query, $db);
 if (!$result) {
@@ -37,12 +35,13 @@ $_SESSION["userstatus"] = intval($user_row["status"]);
 
 global $date, $shortday, $timestamps;
 
-$template_details = GetBasicTwigVars();
+$template_details = GetBasicTwigVars($db);
 $template_details = array_merge($template_details,
   CalculateTimeToSinceLbw($year, $month, $day));
 
 
-$result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries " .
+$result = mysql_query("SELECT count(*) as regs, sum(attending) as ads," .
+"sum(children)as kids, count(distinct country) as countries " .
 "FROM people2 where (attending>0) AND (status>1) " .
 "AND (present = 1)", $db);
 $row = mysql_fetch_array($result);
@@ -52,7 +51,8 @@ $template_details['present_children'] = $row["kids"];
 $tempate_details['present_countries'] = $row["countries"];
 
 // Quick statistics
-$result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries " .
+$result = mysql_query("SELECT count(*) as regs,sum(attending) as ads," .
+"sum(children)as kids, count(distinct country) as countries " .
 "FROM people2 where (attending>0) AND (status>1) " .
 "AND arrival IS NOT NULL AND departure IS NOT NULL", $db);
 $row = mysql_fetch_array($result);
@@ -62,7 +62,8 @@ $template_details['potential_adults'] = $row["ads"];
 $template_details['potential_kids'] = $row["kids"];
 $template_details['potential_countries'] = $row["countries"];
 
-$result = mysql_query("SELECT count(*) as regs,sum(attending) as ads, sum(children)as kids, count(distinct country) as countries " .
+$result = mysql_query("SELECT count(*) as regs,sum(attending) as ads," .
+"sum(children)as kids, count(distinct country) as countries " .
 "FROM people2 where (attending>0) AND (status>1) " .
 "AND (arrival IS NULL OR departure IS NULL)", $db);
 $row = mysql_fetch_array($result);
@@ -85,7 +86,7 @@ if (is_null($user_row["arrival"]) || is_null($user_row["departure"]) && ($user_r
 
 //Presenting
 $result = mysql_query(
-  "SELECT name,type, messages, id as forum,type,day,hour,forum_duration " .
+  "SELECT name,type, id as forum,type,day,hour,forum_duration " .
   "FROM Events WHERE owner='" . $_SESSION["userid"] .
   "' ORDER BY day,hour", $db);
 $q = mysql_num_rows($result);
@@ -117,7 +118,7 @@ if ($q) {
       error_log(mysql_error($db));
     }
     $org_event['attendees'] = mysql_num_rows($event_att_result);
-    $org_event['messages'] = $row['messages'];
+    $org_event['messages'] = GetNumberOfMessagesInEvent($row['forum'], $db);
     array_push($template_details['org_events'], $org_event);
   }
 } else {
@@ -125,7 +126,7 @@ if ($q) {
 }
 
 $template_details['att_events'] = Array();
-$result = mysql_query("SELECT name, firstname ,surname, messages,Events.id as evt, owner,type,day,hour,forum_duration FROM Events, people2, eventreg WHERE (Events.id = eventreg.event) AND (people2.id = Events.owner) and ((eventreg.geek='" . $_SESSION["userid"] . "') AND (geek != owner))order by day,hour,forum_duration", $db);
+$result = mysql_query("SELECT name, firstname ,surname,Events.id as evt, owner,type,day,hour,forum_duration FROM Events, people2, eventreg WHERE (Events.id = eventreg.event) AND (people2.id = Events.owner) and ((eventreg.geek='" . $_SESSION["userid"] . "') AND (geek != owner))order by day,hour,forum_duration", $db);
 if (!$result) {
   error_log(mysql_error($db));
 } else {
@@ -157,8 +158,7 @@ if (!$result) {
       $att_event['owner'] = $row['owner'];
       $att_event['owner_name'] = $row['firstname'] . " " . $row['surname'];
       $att_event['attendees'] = mysql_num_rows(mysql_query("SELECT geek FROM eventreg WHERE (event=" . $row["evt"] . ") AND  (geek != $owner )"));
-      $att_event['messages'] = $row['messages'];
-
+      $att_event['messages'] = GetNumberOfMessagesInEvent($row['evt'], $db);
       $att_event['schedule_text'] = $sched;
 
       array_push($template_details['att_events'], $att_event);

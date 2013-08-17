@@ -1,5 +1,5 @@
 <?php # -*- php -*-
-require_once 'vendor/autoload.php';
+require_once '/usr/local/lib/php/vendor/autoload.php';
 
 require("dbconnect.inc.php");
 
@@ -41,7 +41,7 @@ function GetTwig()
   ));
 }
 
-function GetBasicTwigVars()
+function GetBasicTwigVars($db)
 {
   global $year, $location, $date;
   $template_details = Array();
@@ -53,7 +53,23 @@ function GetBasicTwigVars()
   $template_details['location'] = $location;
   $template_details['start_date'] = $date[1];
   $template_details['end_date'] = $date[count($date) - 3];
+  $template_details['logged_in_name'] = GetLbwUserName($_SESSION['userid'], $db);
   return $template_details;
+}
+
+function GetNumberOfMessagesInEvent($event, $db)
+{
+  $sql = "SELECT discussions.id as mid, firstname, surname, subject, posted " .
+      "FROM discussions, people2 WHERE (people2.id=writer)  AND " .
+      "(forum = '$event') ORDER BY posted";
+  $result = mysql_query($sql, $db);
+  $template_details['messages'] = Array();
+  if (!$result) {
+    error_log("$sql failed: " . mysql_error($db));
+    return 0;
+  } else {
+    return mysql_num_rows($result);
+  }
 }
 
 function HtmlHead($page, $title, $status, /** @noinspection PhpUnusedParameterInspection */
@@ -148,22 +164,23 @@ function GetCountry($country, $db)
   return $myrow["name"];
 }
 
-function GetlbwUser($geekid, $db)
+function GetLbwUserDetails($geekid, $db)
 {
   if ($geekid < 0) {
-    $geekname[0] = "Unknown";
-    $geekname[1] = "";
-    $geekname[2] = "";
+    return Array("John", "Doe", "nobody@nowhere.com");
   } else {
     $query = "SELECT firstname, surname, email from people2 " .
         "where id='$geekid'";
     $result = mysql_query($query, $db);
     $details = mysql_fetch_array($result);
-    $geekname[0] = $details["firstname"];
-    $geekname[1] = $details["surname"];
-    $geekname[2] = $details["email"];
+    return $details;
   }
-  return $geekname;
+}
+
+function GetLbwUserName($geekid, $db)
+{
+  $details = GetLbwUserDetails($geekid, $db);
+  return $details['firstname'] . ' ' . $details['surname'];
 }
 
 function Event2sched($type, $day, $hour, $duration)
@@ -249,20 +266,6 @@ function getNameOfEvent($event)
   }
   $myrow = mysql_fetch_array($resp);
   return $myrow["name"];
-}
-
-;
-
-function getUsername($user)
-{
-  global $db;
-  $query = "SELECT firstname, surname FROM people2 WHERE id = '$user'";
-  $resp = mysql_query($query, $db);
-  if (!$resp) {
-    printf("<br />$query: %s<br />", mysql_error($db));
-  }
-  $myrow = mysql_fetch_array($resp);
-  return $myrow["firstname"] . " " . $myrow["surname"];
 }
 
 ;

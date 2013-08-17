@@ -146,7 +146,7 @@
         {% endfor %}
         <tr class='post_message'>
             <td colspan='4'>
-                <A href="messages.php?submit=write">Post a message</a>
+                <A href="#message_write" onclick="ToggleDisplay('message_write');">Post a message</a>
             </td>
         </tr>
     </table>
@@ -181,4 +181,8 @@
         <div id='map_canvas' class='map_canvas'></div>
         <div id='map_canvas_europe' class='map_canvas'></div>
     </div>
+    {% set forum_id = 1 %}
+    {% set forum_name = 'Open Forum' %}
+    {% set subject = 'General' %}
+    {% include "message_write.twig" %}
 {% endblock %}
