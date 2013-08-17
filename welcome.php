@@ -190,4 +190,5 @@ if ($count) {
   }
 }
 $twig = GetTwig();
+/** @noinspection PhpUndefinedMethodInspection */
 echo $twig->render('welcome.twig', $template_details);

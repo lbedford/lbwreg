@@ -1,19 +1,12 @@
 <?php
 require("basefunc.inc.php");
 
-/* variables from the environment (GET/POST) */
-if (array_key_exists("order", $_REQUEST)) {
-  $order = addslashes($_REQUEST["order"]);
-}
-
 CheckLoggedInOrRedirect();
 $db = ConnectMysql();
 
-HtmlHead("participants", "Participants", $_SESSION["userstatus"], $_SESSION["userid"]);
 
-echo "";
-
-if (!isset($order) or ($order == "")) {
+$order = GetEntryFromRequest('order', '');
+if ($order == "") {
   $order = "surname";
 }
 
@@ -21,6 +14,7 @@ $ordering = "ASC";
 if ($order == "present") {
   $ordering = "DESC";
 }
+$template_details = GetBasicTwigVars($db);
 
 $query = "SELECT  people2.id as id, firstname, surname, email, " .
     "city, country.name as country, arrival, departure, attending, " .
@@ -29,41 +23,37 @@ $query = "SELECT  people2.id as id, firstname, surname, email, " .
     "(status>1)  ORDER by $order $ordering";
 $result = mysql_query($query, $db);
 if (!$result) {
-  printf("%s<br>%s<br>", $query, mysql_error($db));
-}
-
-global $date, $acctype;
-$r2 = mysql_query("SELECT Count(*) AS count,sum(attending) AS geeks,sum(children)AS kids FROM people2 WHERE (attending>0) AND (status>1)", $db);
-echo "<table class='reginfo'>\n";
-$totals = mysql_fetch_array($r2);
-printf("<tr ><TH COLSPAN=6>Registered Users (%d registrations; %d adults and %d children):</th></tr>\n", $totals["count"], $totals["geeks"], $totals["kids"]);
-echo "<tr ><th><A href='?order=surname'>Name</a></th>";
-echo "<th><A href='?order=city,surname'>City</a>,&nbsp;&nbsp;<A href='?order=country,city,surname'>Country</a></th><th>Adults<br>Children</th><th>Dates</th><th><A href='?order=kindofaccomodation'>Accomodation</a></th><th><a href='?order=present'>Present</a></tr>\n";
-while ($row = mysql_fetch_array($result)) {
-  printf("<tr><td>");
-  printf("<A HREF=userview.php?user=%d>", $row["id"]);
-  printf("%s, %s</a>", $row["surname"], $row["firstname"]);
-
-  printf("</td><td>%s, %s</td>", $row["city"], $row["country"]);
-  printf("<td>%d + %d</td>", $row["attending"], $row["children"]);
-  printf("<TD> %s - %s</a></td>", $date[$row["arrival"]], $date[$row["departure"]]);
-  printf("<td>%s</td>\n", $acctype[$row["kindofaccomodation"]]);
-  printf("<td>%s</td></tr>\n", $row["present"] ? "Yes" : "No");
-}
-
-echo "</table><br>";
-
-$sql = "SELECT country , count(*) AS q,sum(attending) AS number,sum(children) AS kids,name  FROM people2, country WHERE (country.id = people2.country) AND (attending>0) AND (status>=2)   GROUP BY country ORDER BY number DESC";
-$result = mysql_query($sql, $db);
-
-if (!$result)
-  printf("%s<br>\n", mysql_error($db));
-else {
-  printf("<table class='reginfo' ><tr ><TH COLSPAN=4>By Country</th></tr><tr ><th>Country</th><th>Entries</th><th>Adults</th><th>Children</th></tr>\n");
+  error_log(mysql_error($db));
+  $template_details['error'] = 'Error looking up participants';
+} else {
+  global $date, $acctype;
+  $r2 = mysql_query("SELECT Count(*) AS count,sum(attending) AS geeks,sum(children)AS kids FROM people2 WHERE (attending>0) AND (status>1)", $db);
+  $totals = mysql_fetch_array($r2);
+  $template_details['registered_adults'] = $totals["geeks"];
+  $template_details['registered_children'] = $totals["kids"];
+  $template_details['participants'] = array();
   while ($row = mysql_fetch_array($result)) {
-    printf("<tr><td> %s </td><TD> %s </td><TD> %s </td><TD> %s</td></tr>\n", $row["name"], $row["q"], $row["number"], $row["kids"]);
+    $row["arrival"] = $date[$row["arrival"]];
+    $row["departure"] = $date[$row["departure"]];
+    $row["kindofaccomodation"] = $acctype[$row["kindofaccomodation"]];
+    $row['present'] = $row['present'] ? "Yes" : "No";
+    array_push($template_details['participants'], $row);
   }
-  printf("</table>\n");
+
+  $sql = "SELECT country AS name, sum(1) AS adults,sum(children) AS children,name  FROM people2, country WHERE (country.id = people2.country) AND (attending>0) AND (status>=2)   GROUP BY country ORDER BY adults DESC";
+  $result = mysql_query($sql, $db);
+
+  $template_details['countries'] = array();
+  if (!$result) {
+    error_log(mysql_error($db));
+    $template_details['error'] = 'Error looking up countries';
+  } else {
+    while ($row = mysql_fetch_array($result)) {
+      array_push($template_details['countries'], $row);
+    }
+  }
 }
 
-HtmlTail();
+$twig = GetTwig();
+/** @noinspection PhpUndefinedMethodInspection */
+echo $twig->render('participants.twig', $template_details);

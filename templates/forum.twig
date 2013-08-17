@@ -24,9 +24,11 @@
                 </td>
             </tr>
             {% if admin %}
+                {% set event_type_text = 'event' %}
                 <tr>
                     <th>
-                        <a href="forumedit.php?forum={{ forum_id }}">
+                        <a href="#{{ event_type_text }}_propose"
+                           onclick="ToggleDisplay('{{ event_type_text }}_propose');">
                             Edit the event information
                         </a>
                     </th>
@@ -117,6 +119,7 @@
             {% endif %}
         </table>
     {% endif %}
-    {% set message_subject = 'General' %}
+    {% include "propose_window.twig" %}
     {% include "message_write.twig" %}
+
 {% endblock %}

@@ -155,4 +155,5 @@ for ($day_index = 1; $day_index < count($date) - 2; $day_index++) {
 
 $template_details['schedule'] = $schedule;
 $twig = GetTwig();
+/** @noinspection PhpUndefinedMethodInspection */
 echo $twig->render('schedule.twig', $template_details);

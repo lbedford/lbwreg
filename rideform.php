@@ -22,7 +22,7 @@ switch ($_REQUEST['option']) {
     echo "<INPUT TYPE=HIDDEN NAME=xtype VALUE=" . $row["type"] . ">";
     echo "<INPUT TYPE=HIDDEN NAME=person VALUE=$userid>";
     echo "<table class='reginfo'>";
-    printf("<tr><TD COLSPAN=2>A Ride being %s by %s</td></tr>", ($row["type"] == "offer") ? "Offered" : "requested", getUsername($userid));
+    printf("<tr><TD COLSPAN=2>A Ride being %s by %s</td></tr>", ($row["type"] == "offer") ? "Offered" : "requested", GetLbwUserName($userid, $db));
     echo "<tr><td>Email:</td><td><INPUT TYPE=TEXT NAME=email VALUE=" . $row["email"] . " size='60'></td></tr>";
 
     if (!strcmp($row["dest"], $location)) {
@@ -91,7 +91,7 @@ switch ($_REQUEST['option']) {
     echo "<INPUT TYPE=HIDDEN NAME=xtype VALUE=$xtype>";
     echo "<INPUT TYPE=HIDDEN NAME=person VALUE=$userid>";
     echo "<table class='reginfo'>";
-    printf("<tr><TD COLSPAN=2>A Ride being %s by %s</td></tr>", ($xtype == "offer") ? "offered" : "requested", getUsername($userid));
+    printf("<tr><TD COLSPAN=2>A Ride being %s by %s</td></tr>", ($xtype == "offer") ? "offered" : "requested", GetLbwUserName($userid, $db));
     echo "<tr><td>Email:</td><td><INPUT TYPE=TEXT NAME=email VALUE=" . $row["email"] . " size='60'></td></tr>";
 
     if (!strcmp($dir, "TO")) {

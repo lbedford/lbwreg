@@ -73,7 +73,8 @@ switch ($submit) {
     break;
 }
 
-$query = "SELECT owner, type, name, description FROM Events WHERE id='$forum'";
+$query = "SELECT owner, type, name, schedtxt, description, forum_duration " .
+    "FROM Events WHERE id='$forum'";
 $result = mysql_query($query, $db);
 if (!$result) {
   error_log(mysql_error($db));
@@ -85,7 +86,11 @@ $foruminfo = mysql_fetch_array($result);
 $owner_id = $foruminfo['owner'];
 
 $event_admin = ($owner_id == $userid);
-
+$template_details['event_type'] = $foruminfo['type'];
+$template_details['event_heading'] = $foruminfo['name'];
+$template_details['event_description'] = $foruminfo['description'];
+$template_details['event_duration'] = $foruminfo['forum_duration'];
+$template_details['event_schedtxt'] = $foruminfo['schedtxt'];
 // find out if user is registered for this event or not
 $sql = "SELECT event FROM eventreg WHERE geek='$userid' AND event='$forum'";
 $result = mysql_query($sql, $db);
@@ -167,5 +172,6 @@ if (!$result) {
 
 
 $twig = GetTwig();
+/** @noinspection PhpUndefinedMethodInspection */
 echo $twig->render('forum.twig', $template_details);
 exit();

@@ -9,8 +9,7 @@ $userid = $_SESSION['userid'];
 $userstatus = $_SESSION['userstatus'];
 $username = $_SESSION['username'];
 $forum_id = GetEntryFromRequest('forum', 1);
-$result = mysql_query("SELECT name, lastmessage, firstmessage " .
-"FROM Events WHERE id='$forum_id'", $db);
+$result = mysql_query("SELECT name FROM Events WHERE id='$forum_id'", $db);
 if (!$result) {
   error_log('Failed to lookup forum: ' . mysql_error($db));
 }
@@ -25,9 +24,13 @@ switch ($submit) {
     $body = str_replace("\n", "<br>", $body);
     $body = mysql_real_escape_string($body);
     $subject = GetEntryFromRequest('subject', '');
-    $last = $foruminfo["lastmessage"];
-    if (!$last) {
-      $last = "0";
+    $last = 0;
+    $sql = "SELECT id FROM discussions WHERE forum='$forum_id' ORDER BY id DESC LIMIT 1";
+    $result = mysql_query($sql, $db);
+    if (!$result) {
+      error_log(mysql_error($db));
+    } else if (mysql_num_rows($result) > 0) {
+      $last = mysql_fetch_array($result)['id'];
     }
     $sql =
         "INSERT INTO discussions (forum, writer, subject, message, " .
@@ -38,18 +41,8 @@ switch ($submit) {
       error_log("Error running $sql: " . mysql_error($db));
     } else {
       $thismessage = mysql_insert_id($db);
-
-      $first = $foruminfo["firstmessage"];
-      if (!$first) {
-        $first = $thismessage;
-      }
-      $sql = "UPDATE Events SET lastmessage=$thismessage, " .
-          "firstmessage=$first WHERE id=$forum_id";
-      if (!mysql_query($sql, $db)) {
-        error_log("Error running $sql: " . mysql_error($db));
-      }
       $sql = "UPDATE discussions SET next = '$thismessage' WHERE id = '$last'";
-      if (!@mysql_query($sql, $db)) {
+      if (!mysql_query($sql, $db)) {
         error_log("Error running $sql: " . mysql_error($db));
       }
     }
@@ -64,8 +57,8 @@ switch ($submit) {
     $row = mysql_fetch_array($result);
     $template_details['writer'] = $row['writer'];
     $template_details['posted'] = $row['posted'];
-    $template_details['next'] = $row['next'];
-    $template_details['previous'] = $row['previous'];
+    $template_details['next_id'] = $row['next'];
+    $template_details['previous_id'] = $row['previous'];
     $template_details['message_subject'] = $row['subject'];
     $template_details['body'] = $row['message'];
     $template_details['writer_name'] = GetLbwUserName($row['writer'], $db);
@@ -117,5 +110,6 @@ switch ($submit) {
     break;
 }
 $twig = GetTwig();
+/** @noinspection PhpUndefinedMethodInspection */
 echo $twig->render('message_read.twig', $template_details);
 exit();

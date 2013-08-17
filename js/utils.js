@@ -7,6 +7,9 @@
  */
 function ToggleDisplay(element_id) {
     var element = document.getElementById(element_id);
+    if (!element) {
+        window.alert('Failed to find ' + element_id);
+    }
     if (element.style.visibility == 'visible') {
         element.style.visibility = 'hidden';
     } else {

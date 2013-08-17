@@ -1,166 +1,108 @@
 <?php
 require("basefunc.inc.php");
 
+CheckLoggedInOrRedirect();
 $db = ConnectMysql();
 
-
-CheckLoggedInOrRedirect();
 
 $userid = $_SESSION["userid"];
 $userstatus = $_SESSION["userstatus"];
 $user = GetEntryFromRequest('user', $userid);
 $LBWID = GetEntryFromRequest('LBWID', -1);
+$template_details = GetBasicTwigVars($db);
 
-global $date, $xport, $acctype, $accorder;
+global $date, $xport, $acctype;
 
 if (!($userid == $user || $userstatus == 16)) {
-  HtmlHead("useredit", "Illegal Action", "", "");
-  printf("You're not allowed edit this user's information<br><ul>\n");
-  HtmlTail();
-  exit();
-}
-
-if ($LBWID == -1) {
-  $sql = "SELECT * FROM people2 WHERE id='$user'";
-  $result = mysql_query($sql, $db);
-  $row = mysql_fetch_array($result);
-
-  HtmlHead("useredit", "User Information", $userstatus, $user);
-
-  printf("\n<FORM METHOD=POST><INPUT TYPE=HIDDEN NAME=LBWID VALUE=$user>\n");
-  printf("<table class='reginfo'>\n");
-  printf("<tr><td>Login     </td><td><INPUT TYPE=TEXT name=logon VALUE = \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["logon"]));
-  printf("<tr><td>First Name</td><td> <INPUT TYPE=TEXT name=firstname VALUE = \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["firstname"]));
-  printf("<tr><td>Surname</td><td><INPUT TYPE=TEXT name=surname VALUE = \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["surname"]));
-  printf("<tr><td>Email</td><td><INPUT TYPE=TEXT name=email VALUE= \"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["email"]));
-  printf("<tr><td>City</td><td><INPUT TYPE=TEXT name=city VALUE=\"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["city"]));
-  printf("<tr><td>Country</td><td><SELECT name=country>");
-  $sql = "SELECT * FROM country ORDER BY name";
-  $rx = mysql_query($sql, $db);
-  while ($pays = mysql_fetch_array($rx)) {
-    $sel = ($pays["id"] == $row["country"]) ? "SELECTED" :
-        "";
-    printf("<OPTION VALUE=%d %s>%s\n", $pays["id"], $sel, $pays["name"]);
-  }
-  printf("</select></td></tr>\n");
-
-  printf("<tr><td>number of children</td><td><INPUT TYPE=TEXT name = children VALUE=\"%s\" SIZE=4></td></tr>\n", $row["children"]);
-  printf("<tr><td>Arrival</td><td><SELECT name = arrival>");
-  for ($i = 0; $i < count($date) - 1; $i++) {
-    $sel = ($row["arrival"] == $i && !is_null($row["arrival"])) ?
-        "SELECTED" : "";
-    printf("<OPTION VALUE=%d %s>%s\n", $i, $sel, $date[$i]);
-  }
-  printf("<OPTION VALUE=NULL %s>Unknown\n", is_null($row["arrival"]) ?
-      "SELECTED" : "");
-  printf("</select></td></tr>\n");
-
-  printf("<tr><td>Departure</td><td><SELECT name = departure>");
-  for ($i = 0; $i < count($date) - 1; $i++) {
-    $sel = ($row["departure"] == $i && !is_null($row["departure"])) ?
-        "SELECTED" : "";
-    printf("<OPTION VALUE=%d %s>%s\n", $i, $sel, $date[$i]);
-  }
-  printf("<OPTION VALUE=NULL %s>Unknown\n", is_null($row["departure"]) ?
-      "SELECTED" : "");
-  printf("</select></td></tr>\n");
-
-  printf("<tr><td>Travelling by</td><td><SELECT name = travelby>");
-  for ($i = 0; $i < count($xport); $i++) {
-    $sel = ($i == $row["travelby"]) ? "SELECTED" :
-        "";
-    printf("<OPTION VALUE = %s %s>%s\n", $i, $sel, $xport[$i]);
-  }
-  printf("</select></td></tr>\n");
-  printf("<tr><td>Kind of Accommodation</td><td><SELECT name = kindofaccomodation>\n");
-  for ($i = 0; $i < count($acctype); $i++) {
-    $sel = ($accorder[$i] == $row["kindofaccomodation"]) ? "SELECTED" : "";
-    printf("<OPTION VALUE = %s %s>%s\n", $i, $sel, $acctype[$accorder[$i]]);
-  }
-  printf("</select></td></tr>\n");
-
-  printf("<tr><td>Name of Accomodation<br>if known</td><td><INPUT TYPE=TEXT name = nameofaccomodation VALUE=\"%s\" SIZE=35></td></tr>\n", htmlspecialchars($row["nameofaccomodation"]));
-
-  printf("<tr><td>Attending?</td><td><INPUT TYPE=CHECKBOX name=attending VALUE=\"1\" %s></td></tr>\n", $row["attending"] == 1 ? "checked=checked" : "");
-
-  echo "<tr>";
-  echo "<TD>";
-  echo "<INPUT TYPE=SUBMIT NAME=submit VALUE=SAVE>";
-  echo "</td>";
-  echo "<TD>";
-  echo "<INPUT TYPE=SUBMIT NAME=submit VALUE=CANCEL>";
-  echo "</td>";
-  echo "</tr>\n";
-  echo "</table>\n";
-  echo "</form>\n";
-  HtmlTail();
-  exit();
+  $template_details['error'] = "You're not allowed edit this user's information";
 } else {
-  $LBWID = mysql_real_escape_string(trim($LBWID));
-  $submit = GetEntryFromRequest('submit', 'CANCEL');
-  $logon = GetEntryFromRequest('logon', '');
-  $firstname = GetEntryFromRequest('firstname', 'Reto');
-  $surname = GetEntryFromRequest('surname', 'Schmidt');
-  $email = GetEntryFromRequest('email', 'nobody@local.xxx');
-  $city = GetEntryFromRequest('city', 'Accra');
-  $country = GetEntryFromRequest('country', 1);
-  $attending = intval(GetEntryFromRequest('attending', 0));
-  $children = intval(GetEntryFromRequest('children', 0));
-  $arrival = GetEntryFromRequest('arrival', 'null');
-  $departure = GetEntryFromRequest('departure', 'null');
-  $travelby = GetEntryFromRequest('travelby', 'null');
-  $kindofaccomodation = GetEntryFromRequest('kindofaccomodation', 'null');
-  $nameofaccomodation = GetEntryFromRequest('nameofaccomodation', 'null');
-  if ($submit == 'CANCEL') {
-    header("Location: welcome.php");
-    exit();
-  }
-  if (!($LBWID == $userid || $userstatus == 16)) {
-    HtmlHead("useredit", "User Edit", "", "");
-    printf("There seems to be a SNAFU!<br>Session details are missing at bottom<br>");
-    printf("<A HREF=login.php>Continue</a>\n");
-    HtmlTail();
-  }
-  $err = 0;
-  $error = Array();
-  if (($departure < $arrival) && ($departure != "NULL") && ($arrival != "NULL")) {
-    $err++;
-    $error[$err] = "You can not leave before you arrive";
-  }
-  //more error checking
-  $result = mysql_query("SELECT logon FROM people2 WHERE id='$LBWID'", $db);
-  $row = mysql_fetch_array($result);
-  if ($row["logon"] != $logon) {
-    if (strlen($logon) < 4) {
-      echo "login must be at least 4 letters<br>\n";
-      $err++;
-    }
-    $result = mysql_query("SELECT id,logon FROM people2 WHERE (logon LIKE '$logon') AND (id != '$LBWID')", $db);
-    if (!$result) {
-      echo mysql_error($db) . "<br>\n";
-      exit();
-    }
-    if (mysql_num_rows($result) > 0) {
-      $err++;
-      echo "Login \"" . htmlspecialchars($logon) . "\" is already in use<br>\n";
-    }
-  }
-  if ($err == 0) {
-    $sql = "UPDATE people2 SET logon = '$logon',email = '$email', city='$city', country=$country, attending=$attending, children='$children', arrival=$arrival, departure=$departure, travelby='$travelby', kindofaccomodation='" . $accorder[$kindofaccomodation] . "', nameofaccomodation='$nameofaccomodation', firstname='$firstname', surname='$surname'  WHERE id='$LBWID'";
+  if ($LBWID == -1) {
+    $sql = "SELECT * FROM people2 WHERE id='$user'";
     $result = mysql_query($sql, $db);
     if (!$result) {
-      HtmlHead("useredit", "Database Error", $userstatus, $userid);
-      printf("%s", mysql_error());
-      HtmlTail();
+      error_log(mysql_error($db));
+      $template_details['error'] = "Failed to lookup basic user info";
+    }
+    $row = mysql_fetch_array($result);
+
+    $template_details['LBWID'] = $user;
+    $template_details['logon'] = htmlspecialchars($row["logon"]);
+    $template_details['firstname'] = htmlspecialchars($row["firstname"]);
+    $template_details['surname'] = htmlspecialchars($row["surname"]);
+    $template_details['email'] = htmlspecialchars($row["email"]);
+    $template_details['city'] = htmlspecialchars($row["city"]);
+    $template_details['current_country'] = $row['country'];
+    $template_details['countries'] = GetCountries($db);
+    $template_details['children'] = $row["children"];
+    $template_details['dates'] = $date;
+    $template_details['arrival_date'] = $row['arrival'];
+    $template_details['departure_date'] = $row['departure'];
+    $template_details['travels'] = $xport;
+    $template_details['travelby'] = $row['travelby'];
+    $template_details['accomodations'] = $acctype;
+    $template_details['accomodation_type'] = $row['kindofaccomodation'];
+    $template_details['accomodation_name'] = htmlspecialchars($row["nameofaccomodation"]);
+    $template_details['attending'] = $row["attending"];
+  } else {
+    $submit = GetEntryFromRequest('submit', 'CANCEL');
+    $logon = GetEntryFromRequest('logon', '');
+    $firstname = GetEntryFromRequest('firstname', 'Reto');
+    $surname = GetEntryFromRequest('surname', 'Schmidt');
+    $email = GetEntryFromRequest('email', 'nobody@local.xxx');
+    $city = GetEntryFromRequest('city', 'Accra');
+    $country = GetEntryFromRequest('country', 1);
+    $attending = intval(GetEntryFromRequest('attending', 0));
+    $children = intval(GetEntryFromRequest('children', 0));
+    $arrival = GetEntryFromRequest('arrival', 'null');
+    $departure = GetEntryFromRequest('departure', 'null');
+    $travelby = GetEntryFromRequest('travelby', 'null');
+    $kindofaccomodation = GetEntryFromRequest('kindofaccomodation', 'null');
+    $nameofaccomodation = GetEntryFromRequest('nameofaccomodation', 'null');
+    if ($submit == 'CANCEL') {
+      header("Location: userview.php?user=$LBWID");
       exit();
     }
-    header("Location: userview.php?user=$LBWID");
-    exit();
+    if (!($LBWID == $userid || $userstatus == 16)) {
+      $template_details['error'] = 'Coding error, sorry';
+    } else {
+      $data_error = Array();
+      if (($departure < $arrival) && ($departure != "NULL") && ($arrival != "NULL")) {
+        array_push($data_error, "You can not leave before you arrive");
+      }
+      //more error checking
+      $result = mysql_query("SELECT logon FROM people2 WHERE id='$LBWID'", $db);
+      $row = mysql_fetch_array($result);
+      if ($row["logon"] != $logon) {
+        if (strlen($logon) < 4) {
+          array_push($data_error, "login must be at least 4 letters");
+          $err++;
+        }
+        $result = mysql_query("SELECT id,logon FROM people2 WHERE (logon LIKE '$logon') AND (id != '$LBWID')", $db);
+        if (!$result) {
+          error_log(mysql_error($db));
+          array_push($data_error, 'Failed to lookup user, something strange going on');
+        }
+        if (mysql_num_rows($result) > 0) {
+          array_push($data_error, "Cannot use logon $logon, as it's already in use");
+        }
+      }
+      if (count($data_error) == 0) {
+        $sql = "UPDATE people2 SET logon = '$logon',email = '$email', city='$city', country=$country, attending=$attending, children='$children', arrival=$arrival, departure=$departure, travelby='$travelby', kindofaccomodation='" . $accorder[$kindofaccomodation] . "', nameofaccomodation='$nameofaccomodation', firstname='$firstname', surname='$surname'  WHERE id='$LBWID'";
+        $result = mysql_query($sql, $db);
+        if (!$result) {
+          error_log("SQL failed $sql: " . mysql_error($db));
+          $template_details["error"] = 'Failed to update database.';
+        } else {
+          header("Location: userview.php?user=$LBWID");
+          exit();
+        }
+      } else {
+        $template_details['data_errors'] = $data_error;
+      }
+    }
   }
-  HtmlHead("useredit", "Inconsistent data", "", "");
-  printf("Your Form contains inconsistent data<br><ul>\n");
-  for ($i = 1; $i <= $err; $i++)
-    printf("<li>%s<li>\n", $error[$i]);
-  printf("</ul><br><A HREF=useredit.php>CONTINUE</a><br>\n");
-  HtmlTail();
 }
+
+$twig = GetTwig();
+/** @noinspection PhpUndefinedMethodInspection */
+echo $twig->render('useredit.twig', $template_details);

@@ -37,7 +37,7 @@ switch ($option) {
     $template_details['lectures'] = array();
     $template_details['hikes'] = array();
     $template_details['community_events'] = array();
-    $query = "SELECT name, schedtxt, owner, messages, surname," .
+    $query = "SELECT name, schedtxt, owner, surname," .
         "firstname, day, hour, forum_duration, type, Events.id as fid " .
         "FROM people2, Events WHERE (people2.id=owner) " .
         "order by day,hour,fid";
@@ -62,7 +62,7 @@ switch ($option) {
 
         $event['name'] = $myrow['name'];
         $event['owner_name'] = GetLbwUserName($owner_id, $db);
-        $event['messages'] = $myrow['messages'];
+        $event['messages'] = GetNumberOfMessagesInEvent($forum_id, $db);
         $event['duration'] = $myrow['forum_duration'];
         array_push($template_details[$type_mapping[$type]], $event);
       }
@@ -71,4 +71,5 @@ switch ($option) {
 global $date;
 $template_details['dates'] = $date;
 $twig = GetTwig();
+/** @noinspection PhpUndefinedMethodInspection */
 echo $twig->render('activities.twig', $template_details);

@@ -323,18 +323,7 @@ hr {
     font-weight: bold;
 }
 
-.propose_window {
-    visibility: hidden;
-    position: fixed;
-    height: 90%;
-    width: 90%;
-    top: 5%;
-    left: 5%;
-    background: #FFFFFF;
-    border: solid black 1px;
-}
-
-.message_write {
+.hidden_form {
     visibility: hidden;
     position: fixed;
     height: 90%;

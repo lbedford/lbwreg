@@ -159,19 +159,23 @@
         </tr>
     </table>
 
+    {% set event_heading = "A title for the event" %}
+    {% set event_schedtxt = 'Too Lazy' %}
+    {% set forum_id = 0 %}
+
     {% set event_type = 1 %}
-    {% set event_type_text = 'Workshop' %}
+    {% set event_type_text = 'workshop' %}
     {% include 'propose_window.twig' %}
 
     {% set event_type = 2 %}
-    {% set event_type_text = 'Lecture' %}
+    {% set event_type_text = 'lecture' %}
     {% include 'propose_window.twig' %}
 
     {% set event_type = 3 %}
-    {% set event_type_text = 'Hike' %}
+    {% set event_type_text = 'hike' %}
     {% include 'propose_window.twig' %}
 
     {% set event_type = 4 %}
-    {% set event_type_text = 'Community Event' %}
+    {% set event_type_text = 'community_event' %}
     {% include 'propose_window.twig' %}
 {% endblock %}

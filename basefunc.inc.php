@@ -309,5 +309,19 @@ function GetEntryFromRequest($entry, $default)
   return $default;
 }
 
-;
+function GetCountries($db)
+{
+  $sql = "SELECT id, name FROM country";
+  $result = mysql_query($sql);
+  if (!$result) {
+    error_log(mysql_error($db));
+    return array();
+  }
+  $countries = array();
+  while ($country = mysql_fetch_array($result)) {
+    $countries[$country['id']] = $country['name'];
+  }
+  return $countries;
+}
+
 ?>
