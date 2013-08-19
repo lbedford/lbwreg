@@ -1,5 +1,5 @@
 <?php # -*- php -*-
-require_once '/usr/local/lib/php/vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 require("dbconnect.inc.php");
 
