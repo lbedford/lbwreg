@@ -333,3 +333,7 @@ hr {
     background: #FFFFFF;
     border: solid black 1px;
 }
+
+.upgrade_me {
+    background: green;
+}

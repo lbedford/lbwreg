@@ -129,7 +129,7 @@ if (isset($submit)) {
             "  Attendees: $noadults + $nochildren\n" .
             "  IP Address: " . $_SERVER['REMOTE_ADDR'] . "\n\n" .
             "Please check that email etc. is reasonable, and upgrade to level 4:\n" .
-            "  $regpath/users.php\n\n" .
+            "  $regpath/userview.php?user=$id\n\n" .
             "Regards,\n\n" .
             "  The LBW $year registration site", "");
 

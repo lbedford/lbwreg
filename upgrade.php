@@ -36,7 +36,7 @@ if (array_key_exists('lbwid', $_REQUEST)) {
       } else if ($certain == "yes") {
         $sql = "DELETE FROM people2 WHERE id='$lbwid'";
         $result = mysql_query($sql, $db);
-        $new_location = "users.php";
+        $new_location = "participants.php";
       } else {
         header("Location: userview.php?user=$lbwid");
         exit();

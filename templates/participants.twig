@@ -6,7 +6,8 @@
     <br/>
     <table class='reginfo'>
         <tr>
-            <TH COLSPAN=6>Registered Users ({{ registered_adults }} adults and {{ registered_children }} children):</th>
+            <TH COLSPAN=6>Registered Users ({{ registered_adults }} adults and {{ registered_children }} children):
+                {% if admin %}<a href='/participants.php?showall=1'>Show ALL THE USERS!</a>{% endif %}</th>
         </tr>
         <tr>
             <th><A href='?order=surname'>Name</a></th>
@@ -19,7 +20,8 @@
         </tr>
         {% for user in participants %}
             <tr>
-                <td><A HREF="userview.php?user={{ user.id }}">{{ user.surname }}, {{ user.firstname }}</a></td>
+                <td {% if admin and user.status == 1 %}class='upgrade_me'{% endif %}><A
+                            HREF="userview.php?user={{ user.id }}">{{ user.surname }}, {{ user.firstname }}</a></td>
                 <td>{{ user.city }}, {{ user.country }}</td>
                 <td>1 + {{ user.children }}</td>
                 <TD>{{ user.arrival }} - {{ user.departure }}</td>

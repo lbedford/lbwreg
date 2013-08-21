@@ -39,19 +39,13 @@
                         {% if day['short'][hour]['display'] == 0 %}
                         <!--
 {% endif %}
-    <td rowspan={{ day['short'][hour]['rowspan'] }} class='schedule_short'>
-        {% if day['short'][hour]['missing_attendees'] %}
-        <span class='missing_attendees'>
-                {%  else %}
-            <span>
-                {% endif %}
+    <td rowspan={{ day['short'][hour]['rowspan'] }} {% if day['short'][hour]['missing_attendees'] %}class='missing_attendees'{% endif %}>
                 {% if day['short'][hour]['id'] != 0 %}
                     <a href="forum.php?forum={{ day['short'][hour]['id'] }}">
                         {{ day['short'][hour]['name'] }}
                     </a>
                     ({{ day['short'][hour]['conflicts'] }}/{{ day['short'][hour]['attendees'] }})
                 {% endif %}
-                                    </span>
     </td>
     {% if day['short'][hour]['display'] == 0%}
 -->
@@ -59,12 +53,8 @@
                         {% if day['medium'][hour]['display'] == 0 %}
                         <!--
 {% endif %}
-    <td rowspan={{ day['medium'][hour]['rowspan'] }} class='schedule_medium'>
-        {% if day['medium'][hour]['missing_attendees'] %}
-        <span class='missing_attendees'>
-                {%  else %}
-            <span>
-                {% endif %}
+    <td rowspan={{ day['medium'][hour]['rowspan'] }}
+        {% if day['medium'][hour]['missing_attendees'] %}class='missing_attendees'{% endif %}>
                 {% if day['medium'][hour]['id'] != 0 %}
                     <a href="forum.php?forum={{ day['medium'][hour]['id'] }}">
                         {{ day['medium'][hour]['name'] }}
@@ -79,12 +69,8 @@
                         {% if day['long'][hour]['display'] == 0 %}
                         <!--
 {% endif %}
-    <td rowspan={{ day['long'][hour]['rowspan'] }} class='schedule_long'>
-        {% if day['long'][hour]['missing_attendees'] %}
-        <span class='missing_attendees'>
-                {%  else %}
-            <span>
-                {% endif %}
+    <td rowspan="{{ day['long'][hour]['rowspan'] }}"
+        {% if day['long'][hour]['missing_attendees'] %}class='missing_attendees'{% endif %}>
                 {% if day['long'][hour]['id'] != 0 %}
                     <a href="forum.php?forum={{ day['long'][hour]['id'] }}">
                         {{ day['long'][hour]['name'] }}

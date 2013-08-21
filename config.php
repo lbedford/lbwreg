@@ -55,8 +55,6 @@ $pixupdate_string = "<span title='Place a picture file named mid_&lt;year&gt;_&l
 $admin_menu = array(
 //      pagename              caption            passlevel
   array("updategallery.php", $pixupdate_string, 8),
-  array("users.php", "Users", 8),
-  array("source.php", "Source", 8),
 );
 
 # Event type max length
